@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/01 18:47:54 by yechoi            #+#    #+#             */
-/*   Updated: 2020/04/03 22:07:19 by yechoi           ###   ########.fr       */
+/*   Created: 2020/04/06 14:55:05 by jwon              #+#    #+#             */
+/*   Updated: 2020/04/06 14:55:46 by jwon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,7 @@
 
 t_list	*ft_lstlast(t_list *lst)
 {
-	t_list	*curr;
-	int		count;
-
-	count = ft_lstsize(lst);
-	curr = lst;
-	while (count > 1)
-	{
-		curr = curr->next;
-		count--;
-	}
-	return (curr);
+	while (lst != NULL && lst->next != NULL)
+		lst = lst->next;
+	return (lst);
 }

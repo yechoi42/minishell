@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include "libft.h"
 
-char *g_line; 
-
 typedef struct s_env 
 {
 	char *key;
@@ -44,13 +42,15 @@ void	catch_signals(void)
 int		main(int argc, char **argv, char **envp)
 {
 	t_list *envs;
-	g_line = 0;
+	char	*line;
+
+	line = 0;
 	envs = get_envs(argc, argv, envp);
 	catch_signals();
 	while (1)
 	{
 		ft_putstr_fd("◕_◕ ༽つ", 1);
-		get_next_line(0, &g_line);
+		get_next_line(0, &line);
 	}
 	return (0);
 }

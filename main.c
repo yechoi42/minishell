@@ -16,8 +16,6 @@ typedef struct s_com
 	int		redir;
 } t_com;
 
-t_list 	*g_envs;
-
 t_list	*get_envs(int argc, char **argv, char **envp)
 {
 	t_list	*envs;
@@ -125,14 +123,28 @@ int		find_redir(char *str)
 	return (num);
 }
 
+void	exec_redir(void)
+{	
+}
+
+void	exec_pipe(void)
+{
+}
+
+void	exec_builtin(t_com *cmd)
+{
+}
+
 void	exec_cmds(t_list *cmds)
 {
 	char *str;
 	while (cmds != NULL)
 	{
-		str = ((t_com *)cmds->content)->command;
-		printf("%s ", str);
-		printf("%d\n", ((t_com *)cmds->content)->pipe);
+		if (((t_com *)cmds->content)->redir)
+			exec_redir();
+		if (((t_com *)cmds->content)->pipe)
+			exec_pipe();
+		exec_builtin(((t_com *)cmds->content));
 		cmds = cmds->next;
 	}
 }
@@ -190,11 +202,12 @@ int		main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	t_list	*cmds;
-	char	*test = "aaaaaa=123123123123";
+	t_list 	*envs;
+	//char	*test = "aaaaaa=123123123123";
 
 	line = 0;
 	cmds = 0;
-	g_envs = get_envs(argc, argv, envp);
+	envs = get_envs(argc, argv, envp);
 	catch_signals();
 	//cmd_export(&test, g_envs);
 	while (1)

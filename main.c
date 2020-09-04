@@ -125,47 +125,52 @@ int		find_redir(char *str)
 	return (num);
 }
 
+void	exec_cmds(t_list *cmds)
+{
+	char *str;
+	while (cmds != NULL)
+	{
+		str = ((t_com *)cmds->content)->command;
+		printf("%s ", str);
+		printf("%d\n", ((t_com *)cmds->content)->pipe);
+		cmds = cmds->next;
+	}
+}
+
 t_list	*get_cmds(char *line)
 {
 	int		i;
 	int		start;
 	int		end;
 	t_com	*com;
-	t_list 	*coms;
+	t_list 	*cmds;
 
 	i = 0;
 	start = 0;
 	end = 0;
-	coms = 0;
+	cmds = 0;
 	get_next_line(0, &line);
 	if (!ft_strncmp(line, "\n", 1))
 	{
 		free(line);
 		return (NULL);
 	}
-	while(line[i])
+	while (line[i])
 	{
 		if (line[i] == ';')
 		{ 	
 			end = i;
 			com = (t_com *)malloc(sizeof(t_com));
 			com->command = ft_substr(line, start, end - start + 1);
-			ft_lstadd_back(&coms, ft_lstnew(com));
+			com->pipe = find_pipe(com->command);
+			com->redir = find_redir(com->command);
+			ft_lstadd_back(&cmds, ft_lstnew(com));
 			start = i + 1;
 		}
 		i++;
 	}
 	free(line);
-	return(coms);
-}
-
-void	exec_cmds(t_list *cmds)
-{
-	while (cmds != NULL)
-	{
-		printf("%s ", ((t_com *)cmds->content)->command);
-		cmds = cmds->next;
-	}
+	return(cmds);
 }
 
 void	free_cmds(void *content)
@@ -173,11 +178,11 @@ void	free_cmds(void *content)
 	free(((t_com *)content)->command);
 }
 
-void	init_cmds(t_list *cmds)
+void	init_cmds(t_list **cmds)
 {
-	if (cmds)
-		ft_lstiter(cmds, free_cmds);
-	cmds = NULL;
+	if (*cmds)
+		ft_lstiter(*cmds, free_cmds);
+	*cmds = NULL;
 }
 
 
@@ -195,9 +200,9 @@ int		main(int argc, char **argv, char **envp)
 	while (1)
 	{
 	 	ft_putstr_fd("◕_◕ ༽つ", 1);
-		init_cmds(cmds);
 	 	cmds = get_cmds(line);
 	 	exec_cmds(cmds);
+		init_cmds(&cmds);
 	}
 	return (0);
 }

@@ -24,6 +24,7 @@ t_list	*get_envs(int argc, char **argv, char **envp)
 	t_env	*env;
 	int 	pos;
 	
+	envs = 0;
 	if (!argc && argv)
 		exit(1);
 	while (*envp)
@@ -124,7 +125,7 @@ int		find_redir(char *str)
 	return (num);
 }
 
-t_list	*get_commands(char *line)
+t_list	*get_cmds(char *line)
 {
 	int		i;
 	int		start;
@@ -135,6 +136,7 @@ t_list	*get_commands(char *line)
 	i = 0;
 	start = 0;
 	end = 0;
+	coms = 0;
 	get_next_line(0, &line);
 	if (!ft_strncmp(line, "\n", 1))
 	{
@@ -189,13 +191,13 @@ int		main(int argc, char **argv, char **envp)
 	cmds = 0;
 	g_envs = get_envs(argc, argv, envp);
 	catch_signals();
-	cmd_export(&test, g_envs);
-	// while (1)
-	// {
-	// 	ft_putstr_fd("◕_◕ ༽つ", 1);
-	// 	init_cmds(cmds);
-	// 	cmds = get_commands(line);
-	// 	exec_cmds(cmds);
-	// }
+	//cmd_export(&test, g_envs);
+	while (1)
+	{
+	 	ft_putstr_fd("◕_◕ ༽つ", 1);
+		init_cmds(cmds);
+	 	cmds = get_cmds(line);
+	 	exec_cmds(cmds);
+	}
 	return (0);
 }

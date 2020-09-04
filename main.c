@@ -9,12 +9,15 @@ typedef struct s_env
 	char *value;
 } t_env;
 
-typedef struct s_com
+typedef struct s_cmd
 {
 	char	*command;
 	int		pipe;
 	int		redir;
-} t_com;
+} t_cmd;
+
+
+char	**g_envp;
 
 t_list	*get_envs(int argc, char **argv, char **envp)
 {
@@ -29,7 +32,7 @@ t_list	*get_envs(int argc, char **argv, char **envp)
 	{
 		env = (t_env *)malloc(sizeof(t_env));
 		pos = ft_strchr(*envp, '=') - *envp;
-		env->key = ft_substr(*envp, 0, pos - 1);
+		env->key = ft_substr(*envp, 0, pos);
 		env->value = ft_substr(*envp, pos + 1, ft_strlen(*envp) - pos - 1);
 		ft_lstadd_back(&envs, ft_lstnew(env));
 		envp++;
@@ -131,20 +134,54 @@ void	exec_pipe(void)
 {
 }
 
-void	exec_builtin(t_com *cmd)
+int		is_exist_key(char *key, t_list *envs) // 이미 존재하는 key인지 확인
 {
+	if (ft_strncmp(((t_env *)envs->content)->key, key, ft_strlen(key)) == 0)
+		return (1);
+	return (0);
 }
 
-void	exec_cmds(t_list *cmds)
+char	*find_value(char *key, t_list *envs)
 {
-	char *str;
+	while (envs)
+	{
+		if (is_exist_key(key, envs)) // key가 존재한다면?
+			return (((t_env *)envs->content)->value);
+		envs = envs->next;
+	}
+	return (NULL);
+}
+
+void	exec_builtin(t_cmd *cmd, t_list *envs)
+{
+	char	*path;
+	char	**argv;
+	pid_t	child;
+
+	argv = ft_split(cmd->command, ' ');
+	path = find_value("PATH", envs);
+	child = fork();
+	if (!child)
+	{
+		execve(path, argv, 0);
+	}
+	else
+	{
+		wait(0);
+		free(path);
+	}
+	
+}
+
+void	exec_cmds(t_list *cmds, t_list *envs)
+{
 	while (cmds != NULL)
 	{
-		if (((t_com *)cmds->content)->redir)
+		if (((t_cmd *)cmds->content)->redir)
 			exec_redir();
-		if (((t_com *)cmds->content)->pipe)
+		if (((t_cmd *)cmds->content)->pipe)
 			exec_pipe();
-		exec_builtin(((t_com *)cmds->content));
+		exec_builtin(((t_cmd *)cmds->content), envs);
 		cmds = cmds->next;
 	}
 }
@@ -154,7 +191,7 @@ t_list	*get_cmds(char *line)
 	int		i;
 	int		start;
 	int		end;
-	t_com	*com;
+	t_cmd	*com;
 	t_list 	*cmds;
 
 	i = 0;
@@ -172,8 +209,8 @@ t_list	*get_cmds(char *line)
 		if (line[i] == ';')
 		{ 	
 			end = i;
-			com = (t_com *)malloc(sizeof(t_com));
-			com->command = ft_substr(line, start, end - start + 1);
+			com = (t_cmd *)malloc(sizeof(t_cmd));
+			com->command = ft_substr(line, start, end - start);
 			com->pipe = find_pipe(com->command);
 			com->redir = find_redir(com->command);
 			ft_lstadd_back(&cmds, ft_lstnew(com));
@@ -187,7 +224,7 @@ t_list	*get_cmds(char *line)
 
 void	free_cmds(void *content)
 {
-	free(((t_com *)content)->command);
+	free(((t_cmd *)content)->command);
 }
 
 void	init_cmds(t_list **cmds)
@@ -203,18 +240,17 @@ int		main(int argc, char **argv, char **envp)
 	char	*line;
 	t_list	*cmds;
 	t_list 	*envs;
-	//char	*test = "aaaaaa=123123123123";
 
+	g_envp = envp;
 	line = 0;
 	cmds = 0;
 	envs = get_envs(argc, argv, envp);
 	catch_signals();
-	//cmd_export(&test, g_envs);
 	while (1)
 	{
 	 	ft_putstr_fd("◕_◕ ༽つ", 1);
 	 	cmds = get_cmds(line);
-	 	exec_cmds(cmds);
+	 	exec_cmds(cmds, envs);
 		init_cmds(&cmds);
 	}
 	return (0);

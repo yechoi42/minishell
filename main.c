@@ -328,6 +328,17 @@ void	exec_cmds(t_list *cmds, t_list *envs)
 	}
 }
 
+void	add_cmd_to_list(char *line, t_list **cmds, int start, int end)
+{
+	t_cmd *com;
+
+	com = (t_cmd *)malloc(sizeof(t_cmd));
+	com->command = ft_substr(line, start, end - start);
+	com->pipe = find_pipe(com->command);
+	com->redir = find_redir(com->command);
+	ft_lstadd_back(cmds, ft_lstnew(com));
+}
+
 t_list	*get_cmds(char *line)
 {
 	int		i;
@@ -351,15 +362,12 @@ t_list	*get_cmds(char *line)
 		if (line[i] == ';')
 		{ 	
 			end = i;
-			com = (t_cmd *)malloc(sizeof(t_cmd));
-			com->command = ft_substr(line, start, end - start);
-			com->pipe = find_pipe(com->command);
-			com->redir = find_redir(com->command);
-			ft_lstadd_back(&cmds, ft_lstnew(com));
+			add_cmd_to_list(line, &cmds, start, end);
 			start = i + 1;
 		}
 		i++;
 	}
+	add_cmd_to_list(line, &cmds, start, i);
 	free(line);
 	return(cmds);
 }

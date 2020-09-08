@@ -22,14 +22,14 @@ typedef struct s_cmd
 
 char	**g_envp;
 
-int		is_valid_env(char *arg) // export cmd ÀÎÀÚ À¯È¿¼º Ã¼Å©
+int		is_valid_env(char *arg) // export cmd ì¸ì ìœ íš¨ì„± ì²´í¬
 {
 	if (ft_strchr(arg, '='))
 		return (1);
 	return (0);
 }
 
-int		is_exist_key(char *key, t_list *envs) // ÀÌ¹Ì Á¸ÀçÇÏ´Â keyÀÎÁö È®ÀÎ
+int		is_exist_key(char *key, t_list *envs) // ì´ë¯¸ ì¡´ì¬í•˜ëŠ” keyì¸ì§€ í™•ì¸
 {
 	if (ft_strncmp(((t_env *)envs->content)->key, key, ft_strlen(key)) == 0)
 		return (1);
@@ -59,7 +59,7 @@ t_list	*get_envs(int argc, char **argv, char **envp)
 
 void	catch_sigint()
 {
-	ft_putstr_fd("\n?_? ?ªÄ", 1);
+	ft_putstr_fd("\nâ—•_â—• à¼½ã¤", 1);
 }
 
 void	catch_signals(void)
@@ -104,11 +104,11 @@ void	exec_pipe(void)
 {
 }
 
-char	*find_value(char *key, t_list *envs) // key¿¡ ¸Â´Â value¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+char	*find_value(char *key, t_list *envs) // keyì— ë§ëŠ” valueë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 {
 	while (envs)
 	{
-		if (is_exist_key(key, envs)) // key°¡ Á¸ÀçÇÑ´Ù¸é?
+		if (is_exist_key(key, envs)) // keyê°€ ì¡´ì¬í•œë‹¤ë©´?
 			return (((t_env *)envs->content)->value);
 		envs = envs->next;
 	}
@@ -201,7 +201,7 @@ void	cmd_cd(char **argv, t_list *envs)
 	{
 		path = find_value(argv[1] + 1, envs);
 		if(chdir(path) == -1)
-			ft_putendl_fd(strerror(errno), 2); //¿¡·¯¸Ş¼¼Áö º¸¿Ï ÇÊ¿ä
+			ft_putendl_fd(strerror(errno), 2); //ì—ëŸ¬ë©”ì„¸ì§€ ë³´ì™„ í•„ìš”
 		free(path);
 		return ;
 	}
@@ -210,7 +210,7 @@ void	cmd_cd(char **argv, t_list *envs)
 }
 
 /*************************************************************************/
-void 	print_envs(t_list *envs) // È¯°æº¯¼ö Ãâ·Â ÇÔ¼ö
+void 	print_envs(t_list *envs) // í™˜ê²½ë³€ìˆ˜ ì¶œë ¥ í•¨ìˆ˜
 {
 	if (envs == NULL)
 		return ;
@@ -221,7 +221,7 @@ void 	print_envs(t_list *envs) // È¯°æº¯¼ö Ãâ·Â ÇÔ¼ö
 }
 /*************************************************************************/
 
-void	update_value(t_env *env, t_list **envs) // value ¾÷µ¥ÀÌÆ®
+void	update_value(t_env *env, t_list **envs) // value ì—…ë°ì´íŠ¸
 {
 	// free(((t_env *)envs->content)->value);
 	((t_env *)(*envs)->content)->value = env->value;
@@ -229,7 +229,7 @@ void	update_value(t_env *env, t_list **envs) // value ¾÷µ¥ÀÌÆ®
 	// free(env);
 }
 
-void	add_env_or_modify_value(char **argv, t_list **envs) // È¯°æº¯¼ö¸¦ Ãß°¡ÇÏ°Å³ª value¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
+void	add_env_or_modify_value(char **argv, t_list **envs) // í™˜ê²½ë³€ìˆ˜ë¥¼ ì¶”ê°€í•˜ê±°ë‚˜ valueë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” í•¨ìˆ˜
 {
 	t_env	*env;
 	t_list	*curr;
@@ -242,7 +242,7 @@ void	add_env_or_modify_value(char **argv, t_list **envs) // È¯°æº¯¼ö¸¦ Ãß°¡ÇÏ°Å³
 	curr = *envs;
 	while (curr)
 	{
-		if (is_exist_key(env->key, curr)) // key°¡ Á¸ÀçÇÑ´Ù¸é?
+		if (is_exist_key(env->key, curr)) // keyê°€ ì¡´ì¬í•œë‹¤ë©´?
 		{
 			update_value(env, &curr);
 			return ;
@@ -250,10 +250,10 @@ void	add_env_or_modify_value(char **argv, t_list **envs) // È¯°æº¯¼ö¸¦ Ãß°¡ÇÏ°Å³
 		curr = curr->next;
 	}
 	if (curr == NULL)
-		ft_lstadd_back(envs, ft_lstnew(env)); // ¸Ç µÚ¿¡ Ãß°¡
+		ft_lstadd_back(envs, ft_lstnew(env)); // ë§¨ ë’¤ì— ì¶”ê°€
 }
 
-void	print_double_arr(char **arr) // 2Â÷¿ø ¹è¿­ Ãâ·Â ÇÔ¼ö
+void	print_double_arr(char **arr) // 2ì°¨ì› ë°°ì—´ ì¶œë ¥ í•¨ìˆ˜
 {
 	int		idx;
 	idx = 0;
@@ -261,7 +261,7 @@ void	print_double_arr(char **arr) // 2Â÷¿ø ¹è¿­ Ãâ·Â ÇÔ¼ö
 		ft_putendl_fd(arr[idx++], 1);
 }
 
-void	sort_double_arr(char **arr) // 2Â÷¿ø ¹è¿­ ³»¸²Â÷¼ø Á¤·Ä ÇÔ¼ö
+void	sort_double_arr(char **arr) // 2ì°¨ì› ë°°ì—´ ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬ í•¨ìˆ˜
 {
 	int		i;
 	int		j;
@@ -281,7 +281,7 @@ void	sort_double_arr(char **arr) // 2Â÷¿ø ¹è¿­ ³»¸²Â÷¼ø Á¤·Ä ÇÔ¼ö
 	}
 }
 
-void	modify_env_for_export(char **arr) // export Ãâ·Â À§ÇØ ¾Õ¿¡ declare -x ºÙÀÌ´Â ÇÔ¼ö
+void	modify_env_for_export(char **arr) // export ì¶œë ¥ ìœ„í•´ ì•ì— declare -x ë¶™ì´ëŠ” í•¨ìˆ˜
 {
 	int		idx;
 
@@ -293,7 +293,7 @@ void	modify_env_for_export(char **arr) // export Ãâ·Â À§ÇØ ¾Õ¿¡ declare -x ºÙÀÌ´
 	}
 }
 
-char	**convert_lst_to_arr(t_list *lst) // ¿¬°á¸®½ºÆ®¸¦ ¹è¿­·Î º¯È¯ÇÏ´Â ÇÔ¼ö
+char	**convert_lst_to_arr(t_list *lst) // ì—°ê²°ë¦¬ìŠ¤íŠ¸ë¥¼ ë°°ì—´ë¡œ ë³€í™˜í•˜ëŠ” í•¨ìˆ˜
 {
 	int		idx;
 	int		count;
@@ -319,18 +319,18 @@ char	**convert_lst_to_arr(t_list *lst) // ¿¬°á¸®½ºÆ®¸¦ ¹è¿­·Î º¯È¯ÇÏ´Â ÇÔ¼ö
 	return (arr);
 }
 
-void	cmd_export(char **argv, t_list *envs) // export ¸í·É¾î ½ÇÇà
+void	cmd_export(char **argv, t_list *envs) // export ëª…ë ¹ì–´ ì‹¤í–‰
 {
 	char	**temp;
 
-	if (argv[1] == NULL) // ÀÎÀÚ°¡ ¾ø´Â °æ¿ì
+	if (argv[1] == NULL) // ì¸ìê°€ ì—†ëŠ” ê²½ìš°
 	{
-		temp = convert_lst_to_arr(envs); // ¿¬°á¸®½ºÆ® ¹è¿­·Î º¯È¯ÇØ¼­ ÀÓ½Ã ÀúÀå
-		sort_double_arr(temp); // key ±âÁØÀ¸·Î ³»¸²Â÷¼ø Á¤·Ä
-		modify_env_for_export(temp); // ¾Õ¿¡ declare -x ºÙÀÌ±â
-		print_double_arr(temp); // Ãâ·Â
-		free_double_arr(temp); // ¸Ş¸ğ¸® ÇØÁ¦
-		return ; // ÇÔ¼ö Á¾·á
+		temp = convert_lst_to_arr(envs); // ì—°ê²°ë¦¬ìŠ¤íŠ¸ ë°°ì—´ë¡œ ë³€í™˜í•´ì„œ ì„ì‹œ ì €ì¥
+		sort_double_arr(temp); // key ê¸°ì¤€ìœ¼ë¡œ ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬
+		modify_env_for_export(temp); // ì•ì— declare -x ë¶™ì´ê¸°
+		print_double_arr(temp); // ì¶œë ¥
+		free_double_arr(temp); // ë©”ëª¨ë¦¬ í•´ì œ
+		return ; // í•¨ìˆ˜ ì¢…ë£Œ
 	}
 	argv++;
 	while (*argv)
@@ -347,7 +347,7 @@ void	cmd_export(char **argv, t_list *envs) // export ¸í·É¾î ½ÇÇà
 	}
 }
 /*************************************************************************/
-void	delete_key(char *argv, t_list *envs) // key¿Í ±×¿¡ ¸Â´Â value »èÁ¦
+void	delete_key(char *argv, t_list *envs) // keyì™€ ê·¸ì— ë§ëŠ” value ì‚­ì œ
 {
 	t_list *curr;
 	t_list *next;
@@ -355,7 +355,7 @@ void	delete_key(char *argv, t_list *envs) // key¿Í ±×¿¡ ¸Â´Â value »èÁ¦
 	curr = envs;
 	while (curr->next)
 	{
-		if (is_exist_key(argv, curr->next)) // key°¡ Á¸ÀçÇÑ´Ù¸é?
+		if (is_exist_key(argv, curr->next)) // keyê°€ ì¡´ì¬í•œë‹¤ë©´?
 		{
 			next = curr->next;
 			curr->next = next->next;
@@ -369,7 +369,7 @@ void	delete_key(char *argv, t_list *envs) // key¿Í ±×¿¡ ¸Â´Â value »èÁ¦
 	}
 }
 
-void	cmd_unset(char **argv, t_list *envs) // unset ¸í·É¾î ½ÇÇà
+void	cmd_unset(char **argv, t_list *envs) // unset ëª…ë ¹ì–´ ì‹¤í–‰
 {
 	argv++;
 	while (*argv)
@@ -436,6 +436,20 @@ void	init_quote(t_quote *q)
 	q->end = INIT;
 }
 
+void	check_end(char *argv, int idx, t_quote *q)
+{
+	if ((argv[idx] == '\'' && q->type == QUOTE) ||
+	(argv[idx] == '\"' && q->type == DQUOTE))
+		q->end = idx - 1;
+	else if ((argv[idx + 1] == '\0' && q->type == QUOTE) ||
+	(argv[idx + 1] == '\0' && q->type == DQUOTE))
+		q->end = idx;
+	else if (q->type == ETC &&
+	(argv[idx + 1] == '\'' || argv[idx + 1] == '\"' || argv[idx + 1] == '\0'))
+		q->end = idx;
+	return;
+}
+
 void	check_quote(char *argv, int idx, t_quote *q)
 {
 	if (q->type == INIT)
@@ -457,16 +471,6 @@ void	check_quote(char *argv, int idx, t_quote *q)
 		}
 		return ;
 	}
-	if ((argv[idx] == '\'' && q->type == QUOTE) ||
-	(argv[idx] == '\"' && q->type == DQUOTE))
-		q->end = idx - 1;
-	else if ((argv[idx + 1] == '\0' && q->type == QUOTE) ||
-	(argv[idx + 1] == '\0' && q->type == DQUOTE))
-		q->end = idx;
-	else if (q->type == ETC &&
-	(argv[idx + 1] == '\'' || argv[idx + 1] == '\"' || argv[idx + 1] == '\0'))
-		q->end = idx;
-	return;
 }
 
 char	*parse_argv(char *argv, t_list *envs)
@@ -561,7 +565,7 @@ void	exec_builtin(t_cmd *cmd, t_list *envs)
 		cmd_exit(argv, envs);
 	else
 		cmd_others(argv, envs);
-	// ÇØ´çÇÏÁö ¾Ê´Â ¸í·É¾îÀÏ °æ¿ì¿¡´Â ¾î¶»°Ô ÇÒÁö »ı°¢ÇØºÁ¾ß ÇÒ µí. ¸®ÅÏ°ªµµ ÇÔ²².
+	// í•´ë‹¹í•˜ì§€ ì•ŠëŠ” ëª…ë ¹ì–´ì¼ ê²½ìš°ì—ëŠ” ì–´ë–»ê²Œ í• ì§€ ìƒê°í•´ë´ì•¼ í•  ë“¯. ë¦¬í„´ê°’ë„ í•¨ê»˜.
 }
 
 void	exec_cmds(t_list *cmds, t_list *envs)
@@ -657,7 +661,7 @@ int		main(int argc, char **argv, char **envp)
 	catch_signals();
 	while (1)
 	{
-	 	ft_putstr_fd("?_? ?ªÄ", 1);
+	 	ft_putstr_fd("â—•_â—• à¼½ã¤", 1);
 	 	cmds = get_cmds(line);
 	 	exec_cmds(cmds, envs);
 		init_cmds(&cmds);

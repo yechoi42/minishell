@@ -6,7 +6,7 @@
 /*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:19:40 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/08 15:51:45 by jwon             ###   ########.fr       */
+/*   Updated: 2020/09/08 20:45:40 by jwon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ int		all_digit(char *str)
 	return (1);
 }
 
-void	free_double_arr(char **paths)
+void	free_double_arr(char **arr)
 {
 	int		idx;
 
 	idx = -1;
-	while (paths[++idx])
-		free(paths[idx]);
-	free(paths);
+	while (arr[++idx])
+		free(arr[idx]);
+	free(arr);
 }

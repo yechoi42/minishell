@@ -6,7 +6,7 @@
 /*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:13:45 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/08 16:10:44 by jwon             ###   ########.fr       */
+/*   Updated: 2020/09/08 21:11:23 by jwon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 #define INIT	-1
 
 char			**g_envp;
+int				g_exit_value;
 
 typedef struct	s_env
 {
@@ -85,15 +86,21 @@ void			sort_double_arr(char **arr);
 void			cmd_unset(char **argv, t_list *envs);
 
 /* cmd_exit.c */
+void			print_exit_status(void);
 void			cmd_exit(char **argv, t_list *envs);
 
 /* cmd_others.c */
+char			*find_path(char *argv, t_list *envs);
 void			cmd_others(char **argv, t_list *envs);
 
 /* utils */
 int				is_valid_env(char *arg);
 int				is_exist_key(char *key, t_list *envs);
 int				all_digit(char *str);
-void			free_double_arr(char **paths);
+void			free_double_arr(char **arr);
+
+/* ...ing */
+int				find_pipe(char *str);
+int				find_redir(char *str);
 
 #endif

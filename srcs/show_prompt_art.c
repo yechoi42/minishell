@@ -37,7 +37,7 @@ void		show_prompt(t_list *envs)
 	ft_putstr_fd(" ~/", 1);
 	ft_putstr_fd(pwd, 1);
 	ft_putstr_fd(" ", 1);
-	ft_putstr_fd("\033[0m", 1);
+	ft_putstr_fd("\033[0m", 1); // 색상 값 해제
 	ft_putstr_fd(" $ ", 1);
 	free(pwd);
 }

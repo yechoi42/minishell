@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-static char		*find_path(char *argv, t_list *envs)
+char			*find_path(char *argv, t_list *envs)
 {
 	int			idx;
 	char		*temp;
@@ -9,7 +9,8 @@ static char		*find_path(char *argv, t_list *envs)
 	char		**paths;
 	struct stat	s;
 
-	temp = find_value("PATH", envs);
+	if (!(temp = find_value("PATH", envs)))
+		return (NULL);
 	paths = ft_split(temp, ':');
 	idx = -1;
 	while (paths[++idx])
@@ -25,7 +26,7 @@ static char		*find_path(char *argv, t_list *envs)
 		free(new_path);
 	}
 	free_double_arr(paths);
-	return (NULL);
+	return (ft_strdup(argv));
 }
 
 void			cmd_others(char **argv, t_list *envs)
@@ -39,14 +40,22 @@ void			cmd_others(char **argv, t_list *envs)
 	{
 		ft_putstr_fd(argv[0], 1);
 		ft_putendl_fd(": command not found", 1);
-		return ;
+		exit(42);
 	}
 	child = fork();
 	if (child == 0)
-		execve(path, argv, g_envp);
+	{
+		if (execve(path, argv, g_envp) == -1)
+		{
+			ft_putstr_fd(argv[0], 1);
+			ft_putendl_fd(": command not found", 1);
+			exit(EXIT_SUCCESS);
+		}
+	}
 	else
 	{
-		wait(0);
+		wait(&status);
+		g_exit_value = status / 256;
 		free(path);
 	}
 }

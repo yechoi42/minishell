@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 #include "libft.h"
 
-typedef struct s_env 
+typedef struct s_env
 {
 	char *key;
 	char *value;
@@ -19,7 +19,6 @@ typedef struct s_cmd
 	int		pipe;
 	int		redir;
 } t_cmd;
-
 
 char	**g_envp;
 
@@ -39,10 +38,10 @@ int		is_exist_key(char *key, t_list *envs) // 이미 존재하는 key인지 확�
 
 t_list	*get_envs(int argc, char **argv, char **envp)
 {
-	t_list	*envs;
-	t_env	*env;
 	int 	pos;
-	
+	t_env	*env;
+	t_list	*envs;
+
 	envs = 0;
 	if (!argc && argv)
 		exit(1);
@@ -60,7 +59,7 @@ t_list	*get_envs(int argc, char **argv, char **envp)
 
 void	catch_sigint()
 {
-	ft_putstr_fd("\n◕_◕ ༽つ", 1);
+	ft_putstr_fd("\n◕_◕ ༽つ", 1);
 }
 
 void	catch_signals(void)
@@ -85,7 +84,9 @@ int		find_pipe(char *str)
 
 int		find_redir(char *str)
 {
-	int num = 0;
+	int num;
+
+	num = 0;
 	while (*str)
 	{
 		if (ft_strchr("><", *str))
@@ -96,14 +97,14 @@ int		find_redir(char *str)
 }
 
 void	exec_redir(void)
-{	
+{
 }
 
 void	exec_pipe(void)
 {
 }
 
-char	*find_value(char *key, t_list *envs)
+char	*find_value(char *key, t_list *envs) // key에 맞는 value를 반환하는 함수
 {
 	while (envs)
 	{
@@ -116,17 +117,17 @@ char	*find_value(char *key, t_list *envs)
 /*************************************************************************/
 void	free_double_arr(char **paths)
 {
-	int i;
+	int		idx;
 
-	i = -1;
-	while (paths[++i])
-		free(paths[i]);
+	idx = -1;
+	while (paths[++idx])
+		free(paths[idx]);
 	free(paths);
 }
 
 char	*find_path(char *argv, t_list *envs)
 {
-	int			i;
+	int			idx;
 	char		*temp;
 	char		*new_path;
 	char		**paths;
@@ -134,11 +135,11 @@ char	*find_path(char *argv, t_list *envs)
 
 	temp = find_value("PATH", envs);
 	paths = ft_split(temp, ':');
-	i = -1;
-	while (paths[++i])
+	idx = -1;
+	while (paths[++idx])
 	{
 		temp = ft_strjoin("/", argv);
-		new_path = ft_strjoin(paths[i], temp);
+		new_path = ft_strjoin(paths[idx], temp);
 		free(temp);
 		if (stat(new_path, &s) == 0)
 		{
@@ -153,22 +154,20 @@ char	*find_path(char *argv, t_list *envs)
 
 void	cmd_others(char **argv, t_list *envs)
 {
+	int		status;
 	char	*path;
 	pid_t	child;
-	int		status;
 
 	path = find_path(argv[0], envs);
 	if (!path)
 	{
-		ft_putstr_fd(argv[0],1);
+		ft_putstr_fd(argv[0], 1);
 		ft_putendl_fd(": command not found", 1);
-		return;
+		return ;
 	}
 	child = fork();
 	if (child == 0)
-	{
 		execve(path, argv, g_envp);
-	}
 	else
 	{
 		wait(0);
@@ -196,7 +195,7 @@ void	cmd_cd(char **argv, t_list *envs)
 		if (chdir(path) == -1)
 			ft_putstr_fd(strerror(errno), 2);
 		free(path);
-		return;
+		return ;
 	}
 	else if (*argv[1] == '$')
 	{
@@ -204,7 +203,7 @@ void	cmd_cd(char **argv, t_list *envs)
 		if(chdir(path) == -1)
 			ft_putendl_fd(strerror(errno), 2); //에러메세지 보완 필요
 		free(path);
-		return;
+		return ;
 	}
 	if (chdir(argv[1]) == -1)
 		ft_putstr_fd(strerror(errno), 2);
@@ -230,7 +229,7 @@ void	update_value(t_env *env, t_list **envs) // value 업데이트
 	// free(env);
 }
 
-void	add_env_or_modify_value(char **argv, t_list **envs)
+void	add_env_or_modify_value(char **argv, t_list **envs) // 환경변수를 추가하거나 value를 업데이트하는 함수
 {
 	t_env	*env;
 	t_list	*curr;
@@ -261,12 +260,13 @@ void	print_double_arr(char **arr) // 2차원 배열 출력 함수
 	while (arr[idx])
 		ft_putendl_fd(arr[idx++], 1);
 }
+
 void	sort_double_arr(char **arr) // 2차원 배열 내림차순 정렬 함수
 {
 	int		i;
 	int		j;
-	int		len;
 	char	*temp;
+
 	i = 0;
 	while (arr[i + 1])
 	{
@@ -280,9 +280,11 @@ void	sort_double_arr(char **arr) // 2차원 배열 내림차순 정렬 함수
 		i++;
 	}
 }
+
 void	modify_env_for_export(char **arr) // export 출력 위해 앞에 declare -x 붙이는 함수
 {
 	int		idx;
+
 	idx = 0;
 	while (arr[idx])
 	{
@@ -298,6 +300,7 @@ char	**convert_lst_to_arr(t_list *lst) // 연결리스트를 배열로 변환하
 	char	**arr;
 	char	*keytmp;
 	char	*valuetmp;
+
 	count = ft_lstsize(lst);
 	if (!(arr = (char **)malloc(sizeof(char *) * (count + 1))))
 		return (NULL);
@@ -318,14 +321,16 @@ char	**convert_lst_to_arr(t_list *lst) // 연결리스트를 배열로 변환하
 
 void	cmd_export(char **argv, t_list *envs) // export 명령어 실행
 {
-	char	**copy;
+	char	**temp;
 
-	if (argv[1] == NULL)
+	if (argv[1] == NULL) // 인자가 없는 경우
 	{
-		copy = convert_lst_to_arr(envs);
-		sort_double_arr(copy);
-		modify_env_for_export(copy);
-		print_double_arr(copy);
+		temp = convert_lst_to_arr(envs); // 연결리스트 배열로 변환해서 임시 저장
+		sort_double_arr(temp); // key 기준으로 내림차순 정렬
+		modify_env_for_export(temp); // 앞에 declare -x 붙이기
+		print_double_arr(temp); // 출력
+		free_double_arr(temp); // 메모리 해제
+		return ; // 함수 종료
 	}
 	argv++;
 	while (*argv)
@@ -335,17 +340,18 @@ void	cmd_export(char **argv, t_list *envs) // export 명령어 실행
 			ft_putstr_fd("export: `", 1);
 			ft_putstr_fd(*argv, 1);
 			ft_putendl_fd("': not a valid identifier", 1);
-			return;
+			return ;
 		}
 		add_env_or_modify_value(argv, &envs);
 		argv++;
 	}
 }
 /*************************************************************************/
-void	delete_key(char *argv, t_list *envs)
+void	delete_key(char *argv, t_list *envs) // key와 그에 맞는 value 삭제
 {
 	t_list *curr;
 	t_list *next;
+
 	curr = envs;
 	while (curr->next)
 	{
@@ -362,6 +368,7 @@ void	delete_key(char *argv, t_list *envs)
 		curr = curr->next;
 	}
 }
+
 void	cmd_unset(char **argv, t_list *envs) // unset 명령어 실행
 {
 	argv++;
@@ -375,12 +382,14 @@ void	cmd_unset(char **argv, t_list *envs) // unset 명령어 실행
 
 int		all_digit(char *str)
 {
-	int	i;
-	while (str[i])
+	int	idx;
+
+	idx = 0;
+	while (str[idx])
 	{
-		if (!ft_isdigit(str[i]))
+		if (!ft_isdigit(str[idx]))
 			return (0);
-		i++;
+		idx++;
 	}
 	return (1);
 }
@@ -388,7 +397,6 @@ int		all_digit(char *str)
 void	cmd_exit(char **argv, t_list *envs)
 {
 	int	argc;
-	int	i;
 
 	argc = 0;
 	while (argv[argc] != NULL)
@@ -428,31 +436,9 @@ void	init_quote(t_quote *q)
 	q->end = INIT;
 }
 
-void	check_quote(char *argv, int idx, t_quote *q)
+void	check_end(char *argv, int idx, t_quote *q)
 {
-	if (q->type == INIT)
-	{
-		if (argv[idx] == '\'')
-		{
-			printf("quote starts\n");
-			q->type = QUOTE;
-			q->start = idx + 1;
-		}
-		else if (argv[idx] == '\"')
-		{
-			printf("dquote starts\n");
-			q->type = DQUOTE;
-			q->start = idx + 1;
-		}
-		else
-		{
-			printf("etc starts\n");
-			q->type = ETC;
-			q->start = idx;
-		}
-		return;
-	}
-	if ((argv[idx] == '\'' && q->type == QUOTE) || 
+	if ((argv[idx] == '\'' && q->type == QUOTE) ||
 	(argv[idx] == '\"' && q->type == DQUOTE))
 		q->end = idx - 1;
 	else if ((argv[idx + 1] == '\0' && q->type == QUOTE) ||
@@ -462,6 +448,29 @@ void	check_quote(char *argv, int idx, t_quote *q)
 	(argv[idx + 1] == '\'' || argv[idx + 1] == '\"' || argv[idx + 1] == '\0'))
 		q->end = idx;
 	return;
+}
+
+void	check_quote(char *argv, int idx, t_quote *q)
+{
+	if (q->type == INIT)
+	{
+		if (argv[idx] == '\'')
+		{
+			q->type = QUOTE;
+			q->start = idx + 1;
+		}
+		else if (argv[idx] == '\"')
+		{
+			q->type = DQUOTE;
+			q->start = idx + 1;
+		}
+		else
+		{
+			q->type = ETC;
+			q->start = idx;
+		}
+		return ;
+	}
 }
 
 char	*parse_argv(char *argv, t_list *envs)
@@ -489,7 +498,7 @@ char	*parse_argv(char *argv, t_list *envs)
 		}
 		idx++;
 	}
-	return (tmp[0]); 
+	return (tmp[0]);
 }
 
 char	**modify_argv(char **argv, t_list *envs)
@@ -529,7 +538,7 @@ int		has_quote(char **argv)
 				return (1);
 			j++;
 		}
-		i++;	
+		i++;
 	}
 	return (0);
 }
@@ -555,8 +564,8 @@ void	exec_builtin(t_cmd *cmd, t_list *envs)
 	else if (!ft_strncmp(argv[0], "exit", ft_strlen(argv[0])))
 		cmd_exit(argv, envs);
 	else
-		cmd_others(argv, envs);	
-	// 해당하지 않는 명령어일 경우에는 어떻게 할지 생각해봐야 할 듯. 리턴값도 함께. 	
+		cmd_others(argv, envs);
+	// 해당하지 않는 명령어일 경우에는 어떻게 할지 생각해봐야 할 듯. 리턴값도 함께.
 }
 
 void	exec_cmds(t_list *cmds, t_list *envs)
@@ -574,13 +583,13 @@ void	exec_cmds(t_list *cmds, t_list *envs)
 
 void	add_cmd_to_list(char *line, t_list **cmds, int start, int end)
 {
-	t_cmd *com;
+	t_cmd *cmd;
 
-	com = (t_cmd *)malloc(sizeof(t_cmd));
-	com->command = ft_substr(line, start, end - start);
-	com->pipe = find_pipe(com->command);
-	com->redir = find_redir(com->command);
-	ft_lstadd_back(cmds, ft_lstnew(com));
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	cmd->command = ft_substr(line, start, end - start);
+	cmd->pipe = find_pipe(cmd->command);
+	cmd->redir = find_redir(cmd->command);
+	ft_lstadd_back(cmds, ft_lstnew(cmd));
 }
 
 void	input_from_prompt(char **line)
@@ -595,13 +604,12 @@ void	input_from_prompt(char **line)
 
 t_list	*get_cmds(char *line)
 {
-	int		i;
+	int		idx;
 	int		start;
 	int		end;
-	t_cmd	*com;
 	t_list 	*cmds;
 
-	i = 0;
+	idx = 0;
 	start = 0;
 	end = 0;
 	cmds = 0;
@@ -611,20 +619,20 @@ t_list	*get_cmds(char *line)
 		free(line);
 		return (NULL);
 	}
-	while (line[i])
+	while (line[idx])
 	{
-		if (line[i] == ';')
-		{ 	
-			end = i;
+		if (line[idx] == ';')
+		{
+			end = idx;
 			add_cmd_to_list(line, &cmds, start, end);
-			start = i + 1;
+			start = idx + 1;
 		}
-		i++;
+		idx++;
 	}
-	if (line[i - 1] != ';')
-		add_cmd_to_list(line, &cmds, start, i);
+	if (line[idx - 1] != ';')
+		add_cmd_to_list(line, &cmds, start, idx);
 	free(line);
-	return(cmds);
+	return (cmds);
 }
 
 void	free_cmds(void *content)
@@ -653,7 +661,7 @@ int		main(int argc, char **argv, char **envp)
 	catch_signals();
 	while (1)
 	{
-	 	ft_putstr_fd("◕_◕ ༽つ", 1);
+	 	ft_putstr_fd("◕_◕ ༽つ", 1);
 	 	cmds = get_cmds(line);
 	 	exec_cmds(cmds, envs);
 		init_cmds(&cmds);

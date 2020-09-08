@@ -6,7 +6,7 @@
 /*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:44:33 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/08 16:20:26 by jwon             ###   ########.fr       */
+/*   Updated: 2020/09/08 21:07:17 by jwon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static void		exec_builtin(t_cmd *cmd, t_list *envs)
 		cmd_unset(argv, envs);
 	else if (!ft_strncmp(argv[0], "exit", ft_strlen(argv[0])))
 		cmd_exit(argv, envs);
+	else if (!ft_strncmp(argv[0], "$?", ft_strlen(argv[0])))
+		print_exit_status();
 	else
 		cmd_others(argv, envs);
 	// 해당하지 않는 명령어일 경우에는 어떻게 할지 생각해봐야 할 듯. 리턴값도 함께.

@@ -43,6 +43,7 @@ static void		check_quote(char *argv, int idx, t_quote *q)
 		}
 		return ;
 	}
+	check_end(argv, idx, q);
 }
 
 static char		*parse_argv(char *argv, t_list *envs)

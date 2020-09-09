@@ -18,7 +18,21 @@ void		show_art(void)
 	ft_putendl_fd("\033[0m", 1);
 }
 
-void		show_prompt(t_list *envs)
+
+static void		input_from_prompt(char **line)
+{
+	char *temp;
+
+	get_next_line(0, line);
+	if (*line != NULL)
+	{
+		temp = ft_strtrim(*line, " ");
+		free(*line);
+		*line = temp;
+	}
+}
+
+void		show_prompt(t_list *envs, char **line)
 {
 	char	*user;
 	char	*pwd;
@@ -32,12 +46,13 @@ void		show_prompt(t_list *envs)
 	free(tmp);
 	ft_putstr_fd(user, 1);
 	ft_putstr_fd(" ", 1);
-	ft_putstr_fd("\033[44m", 1); // ÇÏ´Ã»ö ¹è°æ
-	ft_putstr_fd("\033[30m", 1); // °ËÁ¤»ö ÆùÆ®
+	ft_putstr_fd("\033[44m", 1); // ï¿½Ï´Ã»ï¿½ ï¿½ï¿½ï¿½
+	ft_putstr_fd("\033[30m", 1); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®
 	ft_putstr_fd(" ~/", 1);
 	ft_putstr_fd(pwd, 1);
 	ft_putstr_fd(" ", 1);
-	ft_putstr_fd("\033[0m", 1); // »ö»ó °ª ÇØÁ¦
+	ft_putstr_fd("\033[0m", 1); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	ft_putstr_fd(" $ ", 1);
 	free(pwd);
+	input_from_prompt(line);
 }

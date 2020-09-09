@@ -2,7 +2,7 @@
 
 void	catch_sigint()
 {
-	// ft_putstr_fd("\n?—•_?—• à¼½ã¤", 1);
+	// ft_putstr_fd("\n?ï¿½ï¿½_?ï¿½ï¿½ à¼½ã¤", 1);
 }
 
 void	catch_signals(void)
@@ -25,19 +25,19 @@ void	catch_signals(void)
 // 	return (num);
 // }
 
-// int		find_redir(char *str)
-// {
-// 	int num;
+int		find_redir(char *str)
+{
+	int num;
 
-// 	num = 0;
-// 	while (*str)
-// 	{
-// 		if (ft_strchr("><", *str))
-// 			num++;
-// 		str++;
-// 	}
-// 	return (num);
-// }
+	num = 0;
+	while (*str)
+	{
+		if (ft_strchr("><", *str))
+			num++;
+		str++;
+	}
+	return (num);
+}
 
 // void	exec_redir(void)
 // {
@@ -61,8 +61,9 @@ int		main(int argc, char **argv, char **envp)
 	show_art();
 	while (1)
 	{
-		show_prompt(envs);
-	 	cmds = get_cmds(line);
+		show_prompt(envs, &line);
+	 	if ((cmds = get_cmds(line)) == NULL)
+			continue;
 	 	exec_cmds(cmds, envs);
 		init_cmds(&cmds);
 	}

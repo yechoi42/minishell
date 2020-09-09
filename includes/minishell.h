@@ -53,7 +53,8 @@ typedef struct	s_quote
 
 /* show_prompt_art.c */
 void			show_art(void);
-void			show_prompt(t_list *envs);
+// void			show_prompt(t_list *envs);
+void		show_prompt(t_list *envs, char **line);
 
 /* get_cmds.c */
 void			init_cmds(t_list **cmds);

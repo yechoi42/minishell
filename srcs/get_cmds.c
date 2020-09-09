@@ -17,15 +17,20 @@ static void		add_cmd_to_list(char *line, t_list **cmds, int start, int end)
 	ft_lstadd_back(cmds, ft_lstnew(cmd));
 }
 
-static void		input_from_prompt(char **line)
-{
-	char *temp;
+// static void		input_from_prompt(char **line)
+// {
+// 	char *temp;
 
-	get_next_line(0, line);
-	temp = ft_strtrim(*line, " ");
-	free(*line);
-	*line = temp;
-}
+// 	get_next_line(0, line);
+// 	printf("line is |%s|", *line);
+// 	printf("\n");
+// 	if (*line != NULL)
+// 	{
+// 		temp = ft_strtrim(*line, " ");
+// 		free(*line);
+// 		*line = temp;
+// 	}
+// }
 
 void			init_cmds(t_list **cmds)
 {
@@ -45,7 +50,8 @@ t_list			*get_cmds(char *line)
 	start = 0;
 	end = 0;
 	cmds = 0;
-	input_from_prompt(&line);
+	if (line == NULL)
+		return(NULL);
 	if (!ft_strncmp(line, "\n", 1))
 	{
 		free(line);
@@ -61,8 +67,9 @@ t_list			*get_cmds(char *line)
 		}
 		idx++;
 	}
-	if (line[idx - 1] != ';')
+	if (idx > 0 && line[idx - 1] != ';')
 		add_cmd_to_list(line, &cmds, start, idx);
 	free(line);
+	line = NULL;
 	return (cmds);
 }

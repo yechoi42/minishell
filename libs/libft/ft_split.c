@@ -69,6 +69,6 @@ char		**ft_split(char const *s, char c)
 			s += len;
 		}
 	}
-	words[idx] = 0;
+	words[idx] = NULL;
 	return (words);
 }

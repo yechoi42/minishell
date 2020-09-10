@@ -54,13 +54,14 @@ typedef struct	s_quote
 /* show_prompt_art.c */
 void			show_art(void);
 // void			show_prompt(t_list *envs);
-void		show_prompt(t_list *envs, char **line);
+void			show_prompt(t_list *envs, char **line);
 
 /* get_cmds.c */
 void			init_cmds(t_list **cmds);
 t_list			*get_cmds(char *line);
 
 /* exec_cmds.c */
+void			exec_builtin(char **argv, t_list *envs);
 void			exec_cmds(t_list *cmds, t_list *envs);
 
 /* quote.c */
@@ -99,6 +100,7 @@ int				is_valid_env(char *arg);
 int				is_exist_key(char *key, t_list *envs);
 int				all_digit(char *str);
 void			free_double_arr(char **arr);
+char			*substr_and_trim(char *command, int start, int num, char *charset);
 
 /* ...ing */
 int				find_pipe(char *str);

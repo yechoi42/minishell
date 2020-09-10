@@ -13,24 +13,9 @@ static void		add_cmd_to_list(char *line, t_list **cmds, int start, int end)
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	cmd->command = ft_substr(line, start, end - start);
 	// cmd->pipe = find_pipe(cmd->command);
-	// cmd->redir = find_redir(cmd->command);
+	cmd->redir = find_redir(cmd->command);
 	ft_lstadd_back(cmds, ft_lstnew(cmd));
 }
-
-// static void		input_from_prompt(char **line)
-// {
-// 	char *temp;
-
-// 	get_next_line(0, line);
-// 	printf("line is |%s|", *line);
-// 	printf("\n");
-// 	if (*line != NULL)
-// 	{
-// 		temp = ft_strtrim(*line, " ");
-// 		free(*line);
-// 		*line = temp;
-// 	}
-// }
 
 void			init_cmds(t_list **cmds)
 {

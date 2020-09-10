@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-int		is_valid_env(char *arg) // export cmd ÀÎÀÚ À¯È¿¼º Ã¼Å©
+int		is_valid_env(char *arg) // export cmd ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ Ã¼Å©
 {
 	if (ft_strchr(arg, '='))
 		return (1);
 	return (0);
 }
 
-int		is_exist_key(char *key, t_list *envs) // ÀÌ¹Ì Á¸ÀçÇÏ´Â keyÀÎÁö È®ÀÎ
+int		is_exist_key(char *key, t_list *envs) // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ keyï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 {
 	if (ft_strncmp(((t_env *)envs->content)->key, key, ft_strlen(key)) == 0)
 		return (1);
@@ -48,4 +48,15 @@ void	free_double_arr(char **arr)
 	while (arr[++idx])
 		free(arr[idx]);
 	free(arr);
+}
+
+char	*substr_and_trim(char *command, int start, int num, char *charset)
+{
+	char	*temp;
+	char	*temp2;
+
+	temp = ft_substr(command, start, num);
+	temp2 = ft_strtrim(temp, charset);
+	free(temp);
+	return (temp2);
 }

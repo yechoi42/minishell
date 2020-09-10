@@ -138,6 +138,7 @@ void	cmd_redir(t_redir *r, t_list *envs)
 {
 	int		i;
 	int		fd;
+	int		status;
 	pid_t	child;
 	char	*path;
 
@@ -158,7 +159,7 @@ void	cmd_redir(t_redir *r, t_list *envs)
 			else
 				fd = open(r->argv[i], O_RDWR | O_CREAT, 0644);
 		}
-		path = find_path(r->argv[0], envs);
+		path = find_path(r->cmds[0], envs);
 		dup2(fd, (r->types[i - 2] == BREDIR ? STDIN_FILENO : STDOUT_FILENO));
 		close(fd);
 		if (execve(path, r->cmds, g_envp) == -1)
@@ -171,7 +172,8 @@ void	cmd_redir(t_redir *r, t_list *envs)
 	}
 	else
 	{
-		wait(0);
+		wait(&status);
+		g_exit_value = status / 256;
 	}
 }
 
@@ -218,16 +220,17 @@ void			exec_cmds(t_list *cmds, t_list *envs)
 {
 	char	**argv;
 
-	if (!(argv = ft_split(((t_cmd *)cmds->content)->command, ' ')))
-		exit(1);
 	while (cmds != NULL)
 	{
+		if (!(argv = ft_split(((t_cmd *)cmds->content)->command, ' ')))
+			exit(1);
 		if (((t_cmd *)cmds->content)->redir)
 			exec_redir(((t_cmd *)cmds->content), envs);
 		// if (((t_cmd *)cmds->content)->pipe)
 		// 	exec_pipe();
 		else
 			exec_builtin(argv, envs);
+		free_double_arr(argv);
 		cmds = cmds->next;
 	}
 }

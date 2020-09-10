@@ -19,7 +19,7 @@ void	cmd_cd(char **argv, t_list *envs)
 	{
 		path = find_value("HOME", envs);
 		if (chdir(path) == -1)
-			ft_putstr_fd(strerror(errno), 2);
+			ft_putendl_fd(strerror(errno), 2);
 		free(path);
 		return ;
 	}
@@ -27,10 +27,10 @@ void	cmd_cd(char **argv, t_list *envs)
 	{
 		path = find_value(argv[1] + 1, envs);
 		if(chdir(path) == -1)
-			ft_putendl_fd(strerror(errno), 2); //¿¡·¯¸Þ¼¼Áö º¸¿Ï ÇÊ¿ä
+			ft_putendl_fd(strerror(errno), 2); //ï¿½ï¿½ï¿½ï¿½ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
 		free(path);
 		return ;
 	}
 	if (chdir(argv[1]) == -1)
-		ft_putstr_fd(strerror(errno), 2);
+		ft_putendl_fd(strerror(errno), 2);
 }

@@ -12,18 +12,7 @@
 
 #include "minishell.h"
 
-char	*find_value(char *key, t_list *envs) // key¿¡ ¸Â´Â value¸¦ ¹ÝÈ¯ÇÏ´Â ÇÔ¼ö
-{
-	while (envs)
-	{
-		if (is_exist_key(key, envs)) // key°¡ Á¸ÀçÇÑ´Ù¸é?
-			return (((t_env *)envs->content)->value);
-		envs = envs->next;
-	}
-	return (NULL);
-}
-
-void 	print_envs(t_list *envs) // È¯°æº¯¼ö Ãâ·Â ÇÔ¼ö
+static void 	print_envs(t_list *envs) // È¯ï¿½æº¯ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 {
 	if (envs == NULL)
 		return ;
@@ -33,7 +22,18 @@ void 	print_envs(t_list *envs) // È¯°æº¯¼ö Ãâ·Â ÇÔ¼ö
 	print_envs(envs->next);
 }
 
-t_list	*get_envs(int argc, char **argv, char **envp)
+char			*find_value(char *key, t_list *envs) // keyï¿½ï¿½ ï¿½Â´ï¿½ valueï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+{
+	while (envs)
+	{
+		if (is_exist_key(key, envs)) // keyï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½?
+			return (((t_env *)envs->content)->value);
+		envs = envs->next;
+	}
+	return (NULL);
+}
+
+t_list			*get_envs(int argc, char **argv, char **envp)
 {
 	int 	pos;
 	t_env	*env;
@@ -52,4 +52,22 @@ t_list	*get_envs(int argc, char **argv, char **envp)
 		envp++;
 	}
 	return (envs);
+}
+
+void			cmd_env(char **argv, t_list *envs)
+{
+	argv++;
+	while (*argv)
+	{
+		if (!is_valid_env(*argv))
+		{
+			ft_putstr_fd("env: ", 1);
+			ft_putstr_fd(*argv, 1);
+			ft_putendl_fd(": No such file or directory", 1);
+			return ;
+		}
+		add_env_or_modify_value(argv, &envs);
+		argv++;
+	}
+	print_envs(envs);
 }

@@ -23,10 +23,14 @@
 #include <sys/stat.h>
 #include "../libs/libft/libft.h"
 
+
+#define INIT	-1
 #define QUOTE	39
 #define DQUOTE	34
 #define	ETC		42
-#define INIT	-1
+#define	REDIR	62
+#define	DREDIR	6
+#define	BREDIR	60
 
 char			**g_envp;
 int				g_exit_value;
@@ -51,6 +55,16 @@ typedef struct	s_quote
 	int			end;
 } 				t_quote;
 
+typedef struct s_redir 
+{
+	int		argc;
+	char	**argv;
+	char	**cmds;
+	char	*types;
+	char	*file_name;
+} t_redir;
+
+
 /* show_prompt_art.c */
 void			show_art(void);
 // void			show_prompt(t_list *envs);
@@ -74,10 +88,11 @@ void			cmd_cd(char **argv, t_list *envs);
 
 /* cmd_env.c */
 char			*find_value(char *key, t_list *envs);
-void 			print_envs(t_list *envs);
 t_list			*get_envs(int argc, char **argv, char **envp);
+void			cmd_env(char **argv, t_list *envs);
 
 /* cmd_export.c */
+void			add_env_or_modify_value(char **argv, t_list **envs);
 void			cmd_export(char **argv, t_list *envs);
 
 /* cmd_export_utils.c */
@@ -94,6 +109,16 @@ void			cmd_exit(char **argv, t_list *envs);
 /* cmd_others.c */
 char			*find_path(char *argv, t_list *envs);
 void			cmd_others(char **argv, t_list *envs);
+
+/* cmd_redir.c*/
+void			cmd_redir(t_redir *r, t_list *envs);
+void			exec_redir(t_cmd *cmd, t_list *envs);
+
+/* cmd_redir_utils.c*/
+void			init_redir(char *command, t_redir *r);
+int				is_single_redir(char *command, int i);
+int				find_redir_type(char *command, int i);
+int				has_syntax_error(char *str);
 
 /* utils */
 int				is_valid_env(char *arg);

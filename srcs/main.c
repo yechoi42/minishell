@@ -11,19 +11,19 @@ void	catch_signals(void)
 	//should add SIGQUIT func
 }
 
-// int		find_pipe(char *str)
-// {
-// 	int	num;
+int		find_pipe(char *str)
+{
+	int	num;
 
-// 	num = 0;
-// 	while(*str)
-// 	{
-// 		if (*str == '|')
-// 			num++;
-// 		str++;
-// 	}
-// 	return (num);
-// }
+	num = 0;
+	while(*str)
+	{
+		if (*str == '|')
+			num++;
+		str++;
+	}
+	return (num);
+}
 
 int		find_redir(char *str)
 {
@@ -38,14 +38,6 @@ int		find_redir(char *str)
 	}
 	return (num);
 }
-
-// void	exec_redir(void)
-// {
-// }
-
-// void	exec_pipe(void)
-// {
-// }
 
 int		main(int argc, char **argv, char **envp)
 {

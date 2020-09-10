@@ -40,7 +40,7 @@ void			cmd_others(char **argv, t_list *envs)
 	{
 		ft_putstr_fd(argv[0], 1);
 		ft_putendl_fd(": command not found", 1);
-		exit(42);
+		exit(EXIT_FAILURE);
 	}
 	child = fork();
 	if (child == 0)
@@ -49,13 +49,14 @@ void			cmd_others(char **argv, t_list *envs)
 		{
 			ft_putstr_fd(argv[0], 1);
 			ft_putendl_fd(": command not found", 1);
+			free(path);
 			exit(EXIT_SUCCESS);
 		}
+		free(path);
 	}
 	else
 	{
 		wait(&status);
 		g_exit_value = status / 256;
-		free(path);
 	}
 }

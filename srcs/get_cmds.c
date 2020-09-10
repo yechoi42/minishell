@@ -12,7 +12,7 @@ static void		add_cmd_to_list(char *line, t_list **cmds, int start, int end)
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	cmd->command = ft_substr(line, start, end - start);
-	// cmd->pipe = find_pipe(cmd->command);
+	cmd->pipe = find_pipe(cmd->command);
 	cmd->redir = find_redir(cmd->command);
 	ft_lstadd_back(cmds, ft_lstnew(cmd));
 }

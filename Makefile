@@ -11,6 +11,8 @@ SRCS	= 	srcs/show_prompt_art.c \
 			srcs/cmd_unset.c \
 			srcs/cmd_exit.c \
 			srcs/cmd_others.c \
+			srcs/cmd_redir.c \
+			srcs/cmd_redir_utils.c \
 			srcs/utils.c \
 			srcs/main.c
 

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void		update_value(t_env *env, t_list **envs) // value ¾÷µ¥ÀÌÆ®
+static void		update_value(t_env *env, t_list **envs) // value ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 {
 	// free(((t_env *)envs->content)->value);
 	((t_env *)(*envs)->content)->value = env->value;
@@ -20,31 +20,7 @@ static void		update_value(t_env *env, t_list **envs) // value ¾÷µ¥ÀÌÆ®
 	// free(env);
 }
 
-static void		add_env_or_modify_value(char **argv, t_list **envs) // È¯°æº¯¼ö¸¦ Ãß°¡ÇÏ°Å³ª value¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ÇÔ¼ö
-{
-	t_env	*env;
-	t_list	*curr;
-	int		pos;
-	if (!(env = (t_env *)malloc(sizeof(t_env))))
-		return ;
-	pos = ft_strchr(*argv, '=') - *argv;
-	env->key = ft_substr(*argv, 0, pos);
-	env->value = ft_substr(*argv, pos + 1, ft_strlen(*argv) - pos - 1);
-	curr = *envs;
-	while (curr)
-	{
-		if (is_exist_key(env->key, curr)) // key°¡ Á¸ÀçÇÑ´Ù¸é?
-		{
-			update_value(env, &curr);
-			return ;
-		}
-		curr = curr->next;
-	}
-	if (curr == NULL)
-		ft_lstadd_back(envs, ft_lstnew(env)); // ¸Ç µÚ¿¡ Ãß°¡
-}
-
-static void		modify_env_for_export(char **arr) // export Ãâ·Â À§ÇØ ¾Õ¿¡ declare -x ºÙÀÌ´Â ÇÔ¼ö
+static void		modify_env_for_export(char **arr) // export ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Õ¿ï¿½ declare -x ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½Ô¼ï¿½
 {
 	int		idx;
 
@@ -56,7 +32,7 @@ static void		modify_env_for_export(char **arr) // export Ãâ·Â À§ÇØ ¾Õ¿¡ declare 
 	}
 }
 
-static char		**convert_lst_to_arr(t_list *lst) // ¿¬°á¸®½ºÆ®¸¦ ¹è¿­·Î º¯È¯ÇÏ´Â ÇÔ¼ö
+static char		**convert_lst_to_arr(t_list *lst) // ï¿½ï¿½ï¿½á¸®ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 {
 	int		idx;
 	int		count;
@@ -82,18 +58,42 @@ static char		**convert_lst_to_arr(t_list *lst) // ¿¬°á¸®½ºÆ®¸¦ ¹è¿­·Î º¯È¯ÇÏ´Â Ç
 	return (arr);
 }
 
-void			cmd_export(char **argv, t_list *envs) // export ¸í·É¾î ½ÇÇà
+void			add_env_or_modify_value(char **argv, t_list **envs) // È¯ï¿½æº¯ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ï°Å³ï¿½ valueï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+{
+	t_env	*env;
+	t_list	*curr;
+	int		pos;
+	if (!(env = (t_env *)malloc(sizeof(t_env))))
+		return ;
+	pos = ft_strchr(*argv, '=') - *argv;
+	env->key = ft_substr(*argv, 0, pos);
+	env->value = ft_substr(*argv, pos + 1, ft_strlen(*argv) - pos - 1);
+	curr = *envs;
+	while (curr)
+	{
+		if (is_exist_key(env->key, curr)) // keyï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½?
+		{
+			update_value(env, &curr);
+			return ;
+		}
+		curr = curr->next;
+	}
+	if (curr == NULL)
+		ft_lstadd_back(envs, ft_lstnew(env)); // ï¿½ï¿½ ï¿½Ú¿ï¿½ ï¿½ß°ï¿½
+}
+
+void			cmd_export(char **argv, t_list *envs) // export ï¿½ï¿½ï¿½É¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 {
 	char	**temp;
 
-	if (argv[1] == NULL) // ÀÎÀÚ°¡ ¾ø´Â °æ¿ì
+	if (argv[1] == NULL) // ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	{
-		temp = convert_lst_to_arr(envs); // ¿¬°á¸®½ºÆ® ¹è¿­·Î º¯È¯ÇØ¼­ ÀÓ½Ã ÀúÀå
-		sort_double_arr(temp); // key ±âÁØÀ¸·Î ³»¸²Â÷¼ø Á¤·Ä
-		modify_env_for_export(temp); // ¾Õ¿¡ declare -x ºÙÀÌ±â
-		print_double_arr(temp); // Ãâ·Â
-		free_double_arr(temp); // ¸Þ¸ð¸® ÇØÁ¦
-		return ; // ÇÔ¼ö Á¾·á
+		temp = convert_lst_to_arr(envs); // ï¿½ï¿½ï¿½á¸®ï¿½ï¿½Æ® ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ø¼ï¿½ ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		sort_double_arr(temp); // key ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		modify_env_for_export(temp); // ï¿½Õ¿ï¿½ declare -x ï¿½ï¿½ï¿½Ì±ï¿½
+		print_double_arr(temp); // ï¿½ï¿½ï¿½
+		free_double_arr(temp); // ï¿½Þ¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+		return ; // ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½
 	}
 	argv++;
 	while (*argv)

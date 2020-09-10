@@ -26,7 +26,10 @@ void	cmd_exit(char **argv, t_list *envs)
 	while (argv[argc] != NULL)
 		argc++;
 	if (argc == 1)
+	{
+		ft_putendl_fd("exit", 1);
 		exit(EXIT_SUCCESS);
+	}
 	else if (argc == 2 && all_digit(argv[1]))
 	{
 		exit(ft_atoi(argv[1]));

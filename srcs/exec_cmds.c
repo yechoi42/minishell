@@ -12,13 +12,11 @@
 
 #include "minishell.h"
 
-void		exec_builtin(char **argv, t_list *envs)
+int		exec_builtin(char **argv, t_list *envs)
 {
 	if (has_quote(argv))
 		argv = modify_argv(argv, envs);
-	if (!ft_strncmp(argv[0], "pwd", ft_strlen(argv[0])))
-		cmd_pwd(argv, envs);
-	else if (!ft_strncmp(argv[0], "cd", ft_strlen(argv[0])))
+	if (!ft_strncmp(argv[0], "cd", ft_strlen(argv[0])))
 		cmd_cd(argv, envs);
 	else if (!ft_strncmp(argv[0], "env", ft_strlen(argv[0])))
 		cmd_env(argv, envs);
@@ -31,7 +29,8 @@ void		exec_builtin(char **argv, t_list *envs)
 	else if (!ft_strncmp(argv[0], "$?", ft_strlen(argv[0])))
 		print_exit_status();
 	else
-		cmd_others(argv, envs);
+		return (0);
+	return (1);
 	// �ش����� �ʴ� ���ɾ��� ��쿡�� ��� ���� �����غ��� �� ��. ���ϰ��� �Բ�.
 }
 
@@ -47,8 +46,8 @@ void			exec_cmds(t_list *cmds, t_list *envs)
 		// 	exec_pipe();
 		if (((t_cmd *)cmds->content)->redir)
 			exec_redir(((t_cmd *)cmds->content), envs);
-		else
-			exec_builtin(argv, envs);
+		else if (!exec_builtin(argv, envs))
+			cmd_others(argv, envs);
 		free_double_arr(argv);
 		cmds = cmds->next;
 	}

@@ -4,7 +4,7 @@ SRCS	= 	srcs/show_prompt_art.c \
 			srcs/get_cmds.c \
 			srcs/exec_cmds.c \
 			srcs/quote.c \
-			srcs/cmd_pwd_cd.c \
+			srcs/cmd_cd.c \
 			srcs/cmd_env.c \
 			srcs/cmd_export.c \
 			srcs/cmd_export_utils.c \

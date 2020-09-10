@@ -42,17 +42,19 @@ void		show_prompt(t_list *envs, char **line)
 	user = find_value("USER", envs);
 	tmp = getcwd(0, 1024);
 	set = ft_strjoin("/Users/", user);
-	pwd = ft_strtrim(tmp, set);
-	free(tmp);
+	pwd = ft_strjoin("~/", ft_strtrim(tmp, set));
 	ft_putstr_fd(user, 1);
-	ft_putstr_fd(" ", 1);
-	ft_putstr_fd("\033[44m", 1); // �ϴû� ���
-	ft_putstr_fd("\033[30m", 1); // ������ ��Ʈ
-	ft_putstr_fd(" ~/", 1);
-	ft_putstr_fd(pwd, 1);
-	ft_putstr_fd(" ", 1);
-	ft_putstr_fd("\033[0m", 1); // ���� �� ����
-	ft_putstr_fd(" $ ", 1);
+	ft_putstr_fd(" \033[44m\033[30m ", 1);
+	if (ft_strncmp(tmp, set, ft_strlen(tmp)) != 0)
+		ft_putstr_fd(pwd, 1);
+	else if (ft_strncmp(tmp, "/", ft_strlen(tmp)) == 0)
+		ft_putstr_fd("/", 1);
+	else if (ft_strncmp(tmp, "/Users", ft_strlen(tmp)) == 0)
+		ft_putstr_fd("/Users", 1);
+	else if (ft_strncmp(tmp, set, ft_strlen(tmp)) == 0)
+		ft_putstr_fd("~", 1);
+	ft_putstr_fd(" \033[0m $ ", 1);
+	free(tmp);
 	free(pwd);
 	input_from_prompt(line);
 }

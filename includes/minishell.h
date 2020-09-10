@@ -75,7 +75,7 @@ void			init_cmds(t_list **cmds);
 t_list			*get_cmds(char *line);
 
 /* exec_cmds.c */
-void			exec_builtin(char **argv, t_list *envs);
+int				exec_builtin(char **argv, t_list *envs);
 void			exec_cmds(t_list *cmds, t_list *envs);
 
 /* quote.c */

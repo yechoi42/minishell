@@ -93,14 +93,18 @@ void	cmd_redir(t_redir *r, t_list *envs)
         else
 		    dup2(fd, STDOUT_FILENO);
 		close(fd);
-		if (execve(path, r->cmds, g_envp) == -1)
-		{
-			ft_putstr_fd(r->cmds[0], 1);
-			ft_putendl_fd(": command not found", 1);
-			free(path);
-			exit(EXIT_SUCCESS);
-		}
+        if (!exec_builtin(r->cmds, envs))
+        {
+            if (execve(path, r->cmds, g_envp) == -1)
+            {
+                ft_putstr_fd(r->cmds[0], 1);
+                ft_putendl_fd(": command not found", 1);
+                free(path);
+                exit(EXIT_SUCCESS);
+            }
+        }
 		free(path);
+        exit(EXIT_SUCCESS);
 	}
 	else
 	{

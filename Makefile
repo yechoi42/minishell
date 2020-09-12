@@ -1,6 +1,7 @@
 NAME	=	minishell
 
 SRCS	= 	srcs/show_prompt_art.c \
+			srcs/signal.c \
 			srcs/get_cmds.c \
 			srcs/exec_cmds.c \
 			srcs/quote.c \

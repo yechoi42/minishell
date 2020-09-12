@@ -25,14 +25,11 @@ static int	parse_redir(char *command, t_redir *r)
 			start = i + 1;
 		}
 	}
-	if (command[i] == '\0')
-	{
-		r->argv[j] = substr_and_trim(command, start, i - start, " ");
-		if (has_syntax_error(r->argv[j]))
-			return (-1);
-		r->types[j++] = 0;
-		r->argv[j] = 0;
-	}	
+	r->argv[j] = substr_and_trim(command, start, i - start, " ");
+	if (has_syntax_error(r->argv[j]))
+		return (-1);
+	r->types[j++] = 0;
+	r->argv[j] = 0;
 	return (1);
 }		
 // 0, -1 리턴값에서 프리 
@@ -81,6 +78,12 @@ void	cmd_redir(t_redir *r, t_list *envs)
 			else
                 fd = open(r->argv[i], O_RDONLY, 0644);
 		}
+        if (fd < 0)
+        {
+            ft_putstr_fd(r->argv[i - 1], 1);
+			ft_putendl_fd(": No such file or directory", 1);
+			exit(EXIT_FAILURE);
+        }
 		path = find_path(r->cmds[0], envs);
 		if (!path)
 		{
@@ -125,5 +128,7 @@ void	exec_redir(t_cmd *cmd, t_list *envs)
 			ft_putendl_fd("syntax error near unexpected token `newline'", 1);
 		return;
 	}
+    if (has_quote(r.cmds))
+		r.cmds = modify_argv(r.cmds, envs);
 	cmd_redir(&r, envs);
 }

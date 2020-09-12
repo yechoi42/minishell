@@ -19,27 +19,33 @@ void		show_art(void)
 }
 
 
-static void		input_from_prompt(char **line)
+void		input_from_prompt(char **line)
 {
 	char *temp;
 
-	get_next_line(0, line);
+	if (get_next_line(0, line) == 0)
+	{
+		ft_putstr_fd("exit", 1);
+		exit(EXIT_SUCCESS);
+	}
 	if (*line != NULL)
 	{
 		temp = ft_strtrim(*line, " ");
-		free(*line);
+		if (*line)
+		{
+			free(*line);
+			*line = NULL;
+		}
 		*line = temp;
 	}
 }
 
-void		show_prompt(t_list *envs, char **line)
+void		show_prompt(char *user)
 {
-	char	*user;
 	char	*pwd;
 	char	*tmp;
 	char	*set;
-
-	user = find_value("USER", envs);
+	
 	tmp = getcwd(0, 1024);
 	set = ft_strjoin("/Users/", user);
 	pwd = ft_strjoin("~/", ft_strtrim(tmp, set));
@@ -56,5 +62,4 @@ void		show_prompt(t_list *envs, char **line)
 	ft_putstr_fd(" \033[0m $ ", 1);
 	free(tmp);
 	free(pwd);
-	input_from_prompt(line);
 }

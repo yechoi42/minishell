@@ -33,6 +33,7 @@
 #define	BREDIR	60
 
 char			**g_envp;
+char			*g_env_user;
 int				g_exit_value;
 
 typedef struct	s_env
@@ -55,20 +56,31 @@ typedef struct	s_quote
 	int			end;
 } 				t_quote;
 
-typedef struct s_redir 
+typedef struct	s_redir 
 {
-	int		argc;
-	char	**argv;
-	char	**cmds;
-	char	*types;
-	char	*file_name;
-} t_redir;
+	int			argc;
+	char		**argv;
+	char		**cmds;
+	char		*types;
+}				t_redir;
+
+typedef struct	s_pipe
+{
+	int			argc;
+	char		***argv;
+	char		**cmds;
+}				t_pipe;
+
 
 
 /* show_prompt_art.c */
 void			show_art(void);
 // void			show_prompt(t_list *envs);
-void			show_prompt(t_list *envs, char **line);
+void			input_from_prompt(char **line);
+void			show_prompt(char *user);
+
+/* signal.c */
+void 			handle_signal(int signo);
 
 /* get_cmds.c */
 void			init_cmds(t_list **cmds);
@@ -108,7 +120,7 @@ void			cmd_exit(char **argv, t_list *envs);
 
 /* cmd_others.c */
 char			*find_path(char *argv, t_list *envs);
-void			cmd_others(char **argv, t_list *envs);
+void			exec_others(char **argv, t_list *envs);
 
 /* cmd_redir.c*/
 void			cmd_redir(t_redir *r, t_list *envs);
@@ -130,5 +142,8 @@ char			*substr_and_trim(char *command, int start, int num, char *charset);
 /* ...ing */
 int				find_pipe(char *str);
 int				find_redir(char *str);
+
+
+void	branch_pipe(t_pipe *p, int *fd, int i, t_list *envs);
 
 #endif

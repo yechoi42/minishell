@@ -15,7 +15,6 @@ void	init_redir(char *command, t_redir *r)
 	r->argv = (char **)malloc(sizeof(char *) * (r->argc + 1));
 	r->types = (char *)malloc(sizeof(char) * (r->argc + 1));
 	r->cmds = NULL;
-	r->file_name = 0;
 }
 
 int		is_single_redir(char *command, int i)

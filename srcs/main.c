@@ -49,13 +49,21 @@ int		main(int argc, char **argv, char **envp)
 	line = 0;
 	cmds = 0;
 	envs = get_envs(argc, argv, envp);
-	catch_signals();
+	g_env_user = find_value("USER", envs);
 	show_art();
+	signal(SIGINT, (void *)handle_signal);
+	signal(SIGQUIT, (void *)handle_signal);
 	while (1)
 	{
-		show_prompt(envs, &line);
+		show_prompt(g_env_user);
+		input_from_prompt(&line);
+		if (line[0] == '\n')
+		{
+			free(line);
+			continue ;
+		}
 	 	if ((cmds = get_cmds(line)) == NULL)
-			continue;
+			continue ;
 	 	exec_cmds(cmds, envs);
 		init_cmds(&cmds);
 	}

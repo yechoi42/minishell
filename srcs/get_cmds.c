@@ -30,18 +30,12 @@ t_list			*get_cmds(char *line)
 	int		start;
 	int		end;
 	t_list 	*cmds;
-
 	idx = 0;
 	start = 0;
 	end = 0;
 	cmds = 0;
 	if (line == NULL)
-		return(NULL);
-	if (!ft_strncmp(line, "\n", 1))
-	{
-		free(line);
 		return (NULL);
-	}
 	while (line[idx])
 	{
 		if (line[idx] == ';')

@@ -29,7 +29,7 @@ char			*find_path(char *argv, t_list *envs)
 	return (ft_strdup(argv));
 }
 
-void			cmd_others(char **argv, t_list *envs)
+void			exec_others(char **argv, t_list *envs)
 {
 	int		status;
 	char	*path;
@@ -48,7 +48,7 @@ void			cmd_others(char **argv, t_list *envs)
 		if (execve(path, argv, g_envp) == -1)
 		{
 			ft_putstr_fd(argv[0], 1);
-			ft_putendl_fd(": command not found", 1);
+			ft_putendl_fd(":command not found", 1);
 			free(path);
 			exit(EXIT_SUCCESS);
 		}

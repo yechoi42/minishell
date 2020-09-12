@@ -1,21 +1,6 @@
 NAME	=	minishell
 
-SRCS	= 	srcs/show_prompt_art.c \
-			srcs/signal.c \
-			srcs/get_cmds.c \
-			srcs/exec_cmds.c \
-			srcs/quote.c \
-			srcs/cmd_cd.c \
-			srcs/cmd_env.c \
-			srcs/cmd_export.c \
-			srcs/cmd_export_utils.c \
-			srcs/cmd_unset.c \
-			srcs/cmd_exit.c \
-			srcs/cmd_others.c \
-			srcs/cmd_redir.c \
-			srcs/cmd_redir_utils.c \
-			srcs/utils.c \
-			srcs/main.c
+SRCS	= 	main.c
 
 LEAKS	=	-g3 -fsanitize=address
 

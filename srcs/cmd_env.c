@@ -6,13 +6,13 @@
 /*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:25:19 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/08 15:52:53 by jwon             ###   ########.fr       */
+/*   Updated: 2020/09/12 14:16:04 by jwon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void 	print_envs(t_list *envs) // ȯ�溯�� ��� �Լ�
+static void 	print_envs(t_list *envs) // ȯ�溯�� ���? �Լ�
 {
 	if (envs == NULL)
 		return ;
@@ -54,8 +54,26 @@ t_list			*get_envs(int argc, char **argv, char **envp)
 	return (envs);
 }
 
+static char		*make_tmp_envs(char *tmp_envs, char *argv)
+{
+	char	*tmp;
+
+	if (tmp_envs == NULL)
+		tmp_envs = ft_strjoin(argv, "\n");
+	else
+	{
+		tmp = ft_strjoin(argv, "\n");
+		tmp_envs = ft_strjoin(tmp_envs, tmp);
+		free(tmp);
+	}
+	return (tmp_envs);
+}
+
 void			cmd_env(char **argv, t_list *envs)
 {
+	char	*tmp_envs;
+
+	tmp_envs = 0;
 	argv++;
 	while (*argv)
 	{
@@ -66,8 +84,13 @@ void			cmd_env(char **argv, t_list *envs)
 			ft_putendl_fd(": No such file or directory", 1);
 			return ;
 		}
-		add_env_or_modify_value(argv, &envs);
+		tmp_envs = make_tmp_envs(tmp_envs, *argv);
 		argv++;
 	}
 	print_envs(envs);
+	if (tmp_envs != NULL)
+	{
+		ft_putstr_fd(tmp_envs, 1);
+		free(tmp_envs);
+	}
 }

@@ -4,57 +4,50 @@
 void	cmd_pipe(t_pipe *p, int i, t_list *envs)
 {
 	int		status;
-	int		fd[2];
+	int 	fd[2];
+	int		fd2[2];
 	pid_t	child;
+	pid_t	child2;
 	char	*path;
 
-	child = fork();
 	pipe(fd);
+	child = fork();
 	if (child == 0)
 	{
 		dup2(fd[1], 1);
 		close(fd[0]);
-		if (!exec_builtin(p->argv[i], envs))
-		{
-			if (!(path = find_path(p->argv[i][0], envs)))
-			{
-				printf("111\n");
-				ft_putstr_fd(p->argv[i][0], 1);
-				ft_putendl_fd(": command not found", 1);
-				exit(EXIT_SUCCESS);
-			}
-			if (execve(path, p->argv[i], g_envp) == -1)
-			{
-				printf("222\n");
-				ft_putstr_fd(p->argv[i][0], 1);
-                ft_putendl_fd(": command not found", 1);
-				exit(EXIT_SUCCESS);				
-			}
-		}
-		exit(EXIT_SUCCESS);	
+		close(fd[1]);
+		path = find_path(p->argv[0][0], envs);
+		execve(path, p->argv[0], g_envp);
+		free(path);
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{
-		wait(&status);
-		dup2(fd[0], 0);
-		close(fd[1]);
-			fd[0] = 0;
-		g_exit_value = status / 256;
-		child = fork();
-		if (!exec_builtin(p->argv[++i], envs))
+		// waitpid(child, &status, 0);
+		// dup2(fd[0], 0);
+		// close(fd[1]);
+		//pipe(fd2);
+		child2 = fork();
+		if (child2 == 0)
 		{
-			if (!(path = find_path(p->argv[i][0], envs)))
-			{
-				ft_putstr_fd(p->argv[i][0], 1);
-				ft_putendl_fd(": command not found", 1);
-			}
-			if (execve(path, p->argv[i], g_envp) == -1)
-			{
-				ft_putstr_fd(p->argv[i][0], 1);
-				ft_putendl_fd(": command not found", 1);			
-			}
+			dup2(fd[0], 0);
+		close(fd[0]);
+		close(fd[1]);
+			path = find_path(p->argv[1][0], envs);
+			execve(path, p->argv[1], g_envp);
+			free(path);
+			exit(EXIT_SUCCESS);
 		}
-	}	
+		else
+		{
+			wait(&status);
+			close(fd[0]);
+			close(fd[1]);
+			// dup2(fd2[0], 0);
+			// close(fd2[1]);
+		}
+	}
 }
 
 void     parse_p_argv(t_pipe *p, t_list *envs)
@@ -157,12 +150,12 @@ void			exec_cmds(t_list *cmds, t_list *envs)
 		if (!(argv = ft_split(((t_cmd *)cmds->content)->command, ' ')))
 			exit(1);
 		if (((t_cmd *)cmds->content)->pipe)
-		 	exec_pipe(((t_cmd *)cmds->content), envs);
+		  	exec_pipe(((t_cmd *)cmds->content), envs);
 		else if (((t_cmd *)cmds->content)->redir)
 			exec_redir(((t_cmd *)cmds->content), envs);
 		else if (!exec_builtin(argv, envs))
 			exec_others(argv, envs);
-		free_double_arr(argv);
+		//free_double_arr(argv);
 		cmds = cmds->next;
 	}
 }

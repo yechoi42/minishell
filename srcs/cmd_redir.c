@@ -84,8 +84,7 @@ void	cmd_redir(t_redir *r, t_list *envs)
 			ft_putendl_fd(": No such file or directory", 1);
 			exit(EXIT_FAILURE);
         }
-		path = find_path(r->cmds[0], envs);
-		if (!path)
+		if (!(path = find_path(r->cmds[0], envs)))
 		{
 			ft_putstr_fd(r->cmds[0], 1);
 			ft_putendl_fd(": command not found", 1);

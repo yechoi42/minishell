@@ -21,9 +21,9 @@ void		show_art(void)
 
 void		input_from_prompt(char **line)
 {
-	char *temp;
+	char	*temp;
 
-	if (get_next_line(0, line) == 0)
+	if ((get_next_line(0, line) == 0))
 	{
 		ft_putstr_fd("exit", 1);
 		exit(EXIT_SUCCESS);

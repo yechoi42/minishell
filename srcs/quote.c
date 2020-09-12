@@ -93,6 +93,7 @@ char			**modify_argv(char **argv, t_list *envs)
 		free(argv[idx]);
 		idx++;
 	}
+	free(argv);
 	return (ret);
 }
 

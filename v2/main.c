@@ -1,48 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include "./libs/libft/libft.h"
-
-
-#define INIT	-1
-#define QUOTE	39
-#define DQUOTE	34
-#define	ETC		42
-#define	REDIR	62
-#define	DREDIR	6
-#define	BREDIR	60
-
-
-char			**g_envp;
-char			*g_env_user;
-int				g_exit_value;
-
-typedef struct	s_env
-{
-	char 		*key;
-	char 		*value;
-}				t_env;
-
-typedef struct	s_quote
-{
-	int			type;
-	int			start;
-	int			end;
-} 				t_quote;
-
-typedef struct	s_redir 
-{
-	int			argc;
-	char		**argv;
-	char		**cmds;
-	char		*types;
-}				t_redir;
-
+#include "minishell.h"
 
 void	ft_puterror_fd(char *s1, char *s2, int fd)
 {
@@ -503,25 +459,21 @@ char	**get_argv(char *line, t_list *envs)
 
 void	cmd_cd(char **argv, t_list *envs)
 {
-	char *path;
-
+	char	*path;
 	path = 0;
-	if (ft_strlen(argv[1]) == 1 && *argv[1] == '~')
-		argv[1] = ft_strjoin("$", "HOME");
-	if (*argv[1] == '$')
-	{
-		path = find_value(argv[1] + 1, envs);
-		if (chdir(path) == -1)
-			ft_putendl_fd(strerror(errno), 2);
-		free(path);
-		return ;
-	}
-	else if (argv[1] == NULL)
+	if (argv[1] == NULL || ((argv[1] != NULL) &&
+		(ft_strlen(argv[1]) == 1) && (argv[1][0] == '~')))
 	{
 		path = find_value("HOME", envs);
 		if (chdir(path) == -1)
 			ft_putendl_fd(strerror(errno), 2);
-		free(path);
+		return ;
+	}
+	else if (*argv[1] == '$')
+	{
+		path = find_value(argv[1] + 1, envs);
+		if (chdir(path) == -1)
+			ft_putendl_fd(strerror(errno), 2);
 		return ;
 	}
 	if (chdir(argv[1]) == -1)
@@ -786,8 +738,6 @@ void	cmd_pwd(char **argv, t_list *envs)
 	ft_putendl_fd(pwd, 1);
 	free(pwd);
 }
-
-
 
 int		exec_builtin(char *line, t_list *envs)
 {
@@ -1150,13 +1100,74 @@ void	exec_redir(char *line, t_list *envs)
 	cmd_redir(&r, envs);
 }
 
+/*************************************************/
+
+void	parse_pipe(char **line, t_pipe *p, t_list *envs)
+{
+	int		i;
+	char	*temp;
+	char	*temp2;
+
+	i = -1;
+	while ((*line)[++i])
+	{
+		if ((*line)[i] == '|')
+		{
+			temp = ft_substr(*line, 0, i);
+			p->line = ft_strtrim(temp, " ");
+			free(temp);
+			temp = ft_substr(*line, i + 1, ft_strlen(*line) - i);
+			temp2 = ft_strtrim(temp, " ");
+			free(temp);
+			free(*line);
+			*line = temp2;
+			p->argv = get_argv(p->line, envs);
+			return;
+		}
+	}
+}
+
+void	exec_pipe(char *line, t_list *envs)
+{
+	int		i;
+	int		fd[2];
+	int		child[2];
+	int		status[2];
+	t_pipe	p;
+
+	parse_pipe(&line, &p, envs);
+	printf("p.line [%s]\nline[%s]\n", p.line, line);
+	pipe(fd);
+	child[0] = fork();
+	if (child[0] == 0)
+	{
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[0]);
+		close(fd[1]);
+		exec_cmds(p.line, envs);
+		exit(EXIT_SUCCESS);
+	}
+	child[1] = fork();
+	if (child[1] == 0)
+	{
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
+		close(fd[1]);
+		exec_cmds(line, envs);
+		exit(EXIT_SUCCESS);
+	}
+	close(fd[0]);
+	close(fd[1]);
+	waitpid(child[1], &status[1], 0);
+	waitpid(child[0], &status[0], WNOHANG);
+}
 
 /************************************************/
 void	exec_cmds(char *line, t_list *envs)
 {
-	//if (has_pipe(line))
-	// 	exec_pipe(line, envs);
-	if (has_redir(line))
+	if (has_pipe(line))
+	 	exec_pipe(line, envs);
+	else if (has_redir(line))
 		exec_redir(line, envs);
 	else if (!exec_builtin(line, envs))
 		exec_others(line, envs);	

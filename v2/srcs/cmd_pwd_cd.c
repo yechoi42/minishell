@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_pwd_cd.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/13 16:48:08 by jwon              #+#    #+#             */
+/*   Updated: 2020/09/13 16:48:33 by jwon             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	cmd_pwd(char **argv, t_list *envs)
@@ -9,10 +21,10 @@ void	cmd_pwd(char **argv, t_list *envs)
 	free(pwd);
 }
 
-
 void	cmd_cd(char **argv, t_list *envs)
 {
 	char	*path;
+
 	path = 0;
 	if (argv[1] == NULL || ((argv[1] != NULL) &&
 		(ft_strlen(argv[1]) == 1) && (argv[1][0] == '~')))

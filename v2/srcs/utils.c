@@ -1,9 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/13 16:46:10 by jwon              #+#    #+#             */
+/*   Updated: 2020/09/13 17:24:36 by jwon             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void	ft_puterror_fd(char *s1, char *s2, int fd)
+int		ft_puterror_fd(char *s1, char *s2, int fd)
 {
 	ft_putstr_fd(s1, fd);
 	ft_putendl_fd(s2, fd);
+	return (127);
 }
 
 char	*substr_and_trim(char *command, int start, int num, char *charset)

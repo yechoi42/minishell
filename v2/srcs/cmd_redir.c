@@ -8,25 +8,20 @@ static int		do_redir(t_redir *r, t_list *envs)
 
 	fd = open(r->argv[r->argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0744);
 	if (fd < 0)
-    {
-		ft_puterror_fd(r->argv[r->argc - 1], ": No such file or directory", 2);
-		return(EXIT_FAILURE);
-    }
-	if (!(path = find_path(r->cmds[0], envs)))
 	{
-		ft_puterror_fd(r->cmds[0], ": command not found", 2);
-		return(127);
+		ft_puterror_fd(r->argv[r->argc - 1], ": No such file or directory", 2);
+		return (EXIT_FAILURE);
 	}
+	if (!(path = find_path(r->cmds[0], envs)))
+		return (ft_puterror_fd(r->cmds[0], ": command not found", 2));
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
-	if (!exec_builtin(r->argv[r->argc - 1], envs) && (execve(path, r->cmds, g_envp) == -1))
-    {
-		ft_puterror_fd(r->cmds[0], ": command not found", 2);
-        return (127);
-    }
+	if (!exec_builtin(r->argv[r->argc - 1], envs) &&
+		(execve(path, r->cmds, g_envp) == -1))
+		return (ft_puterror_fd(r->cmds[0], ": command not found", 2));
 	free(path);
 	free_double_arr(r->cmds);
-    return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 static int		do_dredir(t_redir *r, t_list *envs)
@@ -37,25 +32,20 @@ static int		do_dredir(t_redir *r, t_list *envs)
 
 	fd = open(r->argv[r->argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0744);
 	if (fd < 0)
-    {
-		ft_puterror_fd(r->argv[r->argc - 1], ": No such file or directory", 2);
-		return(EXIT_FAILURE);
-    }
-	if (!(path = find_path(r->cmds[0], envs)))
 	{
-		ft_puterror_fd(r->cmds[0], ": command not found", 2);
-		return(127);
+		ft_puterror_fd(r->argv[r->argc - 1], ": No such file or directory", 2);
+		return (EXIT_FAILURE);
 	}
+	if (!(path = find_path(r->cmds[0], envs)))
+		return (ft_puterror_fd(r->cmds[0], ": command not found", 2));
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
-	if (!exec_builtin(r->argv[r->argc - 1], envs) && (execve(path, r->cmds, g_envp) == -1))
-    {
-		ft_puterror_fd(r->cmds[0], ": command not found", 2);
-        return (127);
-	}
+	if (!exec_builtin(r->argv[r->argc - 1], envs) &&
+		(execve(path, r->cmds, g_envp) == -1))
+		return (ft_puterror_fd(r->cmds[0], ": command not found", 2));
 	free(path);
 	free_double_arr(r->cmds);
-    return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 static int		do_bredir(t_redir *r, t_list *envs)
@@ -66,25 +56,20 @@ static int		do_bredir(t_redir *r, t_list *envs)
 
 	fd = open(r->argv[r->argc - 1], O_RDONLY, 0644);
 	if (fd < 0)
-    {
-		ft_puterror_fd(r->argv[r->argc - 1], ": No such file or directory", 2);
-		return(EXIT_FAILURE);
-    }
-	if (!(path = find_path(r->cmds[0], envs)))
 	{
-		ft_puterror_fd(r->cmds[0], ": command not found", 2);
-		return(127);
+		ft_puterror_fd(r->argv[r->argc - 1], ": No such file or directory", 2);
+		return (EXIT_FAILURE);
 	}
+	if (!(path = find_path(r->cmds[0], envs)))
+		return (ft_puterror_fd(r->cmds[0], ": command not found", 2));
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	if (!exec_builtin(r->argv[r->argc - 1], envs) && (execve(path, r->cmds, g_envp) == -1))
-    {
-		ft_puterror_fd(r->cmds[0], ": command not found", 2);
-		return (127);
-    }
+	if (!exec_builtin(r->argv[r->argc - 1], envs) &&
+		(execve(path, r->cmds, g_envp) == -1))
+		return (ft_puterror_fd(r->cmds[0], ": command not found", 2));
 	free(path);
 	free_double_arr(r->cmds);
-    return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 void			cmd_redir(t_redir *r, t_list *envs)

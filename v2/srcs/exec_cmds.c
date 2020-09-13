@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-static int			print_exit_status()
+static int		print_exit_status(void)
 {
 	ft_putstr_fd(ft_itoa(g_exit_value), 1);
 	ft_putendl_fd(": command not found", 1);
 	return (1);
 }
 
-int		exec_builtin(char *line, t_list *envs)
+int				exec_builtin(char *line, t_list *envs)
 {
 	char **argv;
 
@@ -32,6 +32,7 @@ int		exec_builtin(char *line, t_list *envs)
 		return (0);
 	}
 	free_double_arr(argv);
+	g_exit_value = 0;
 	return (1);
 }
 
@@ -47,16 +48,13 @@ void			exec_others(char *line, t_list *envs)
 	if (!path)
 	{
 		ft_puterror_fd(argv[0], ": command not found", 2);
-		return;
+		return ;
 	}
 	child = fork();
 	if (child == 0)
 	{
 		if (execve(path, argv, g_envp) == -1)
-		{
-			ft_puterror_fd(argv[0], ": command not found", 2);
-			exit(127);
-		}
+			exit(ft_puterror_fd(argv[0], ": command not found", 2));
 		exit(EXIT_SUCCESS);
 	}
 	wait(&status);
@@ -65,10 +63,10 @@ void			exec_others(char *line, t_list *envs)
 	g_exit_value = status / 256;
 }
 
-void	exec_cmds(char *line, t_list *envs)
+void			exec_cmds(char *line, t_list *envs)
 {
 	if (has_pipe(line))
-	 	exec_pipe(line, envs);
+		exec_pipe(line, envs);
 	else if (has_redir(line))
 		exec_redir(line, envs);
 	else if (!exec_builtin(line, envs))

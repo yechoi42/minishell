@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/13 16:45:47 by jwon              #+#    #+#             */
+/*   Updated: 2020/09/13 16:45:49 by jwon             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	setup(t_list *envs)
@@ -9,7 +21,7 @@ void	setup(t_list *envs)
 	signal(SIGQUIT, (void *)handle_signal);
 }
 
-int     main(int argc, char **argv, char **envp)
+int		main(int argc, char **argv, char **envp)
 {
 	int		i;
 	char	*line;

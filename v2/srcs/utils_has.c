@@ -31,7 +31,7 @@ int		has_pipe(char *str)
 	int	num;
 
 	num = 0;
-	while(*str)
+	while (*str)
 	{
 		if (*str == '|')
 			num++;

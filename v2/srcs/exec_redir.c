@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	init_redir(char *command, t_redir *r)
+void		init_redir(char *command, t_redir *r)
 {
 	int num;
 
@@ -17,7 +17,7 @@ void	init_redir(char *command, t_redir *r)
 	r->cmds = NULL;
 }
 
-int		parse_redir(char *command, t_redir *r)
+int			parse_redir(char *command, t_redir *r)
 {
 	int		i;
 	int		j;
@@ -33,7 +33,7 @@ int		parse_redir(char *command, t_redir *r)
 		{
 			if (j > 0 && ((r->types[0] == BREDIR && command[i] != '<') ||
 				(r->types[0] != BREDIR && command[i] == '<')))
-					return (0);
+				return (0);
 			r->argv[j] = substr_and_trim(command, start, i - start, " ");
 			if (j == 0)
 				r->cmds = ft_split(r->argv[j], ' ');
@@ -66,7 +66,7 @@ void		open_unnecessary_files(t_redir *r)
 		else if (r->types[i - 1] == DREDIR)
 			fd = open(r->argv[i], O_WRONLY | O_CREAT | O_APPEND, 0744);
 		else
-            fd = open(r->argv[i], O_RDONLY, 0644);
+			fd = open(r->argv[i], O_RDONLY, 0644);
 		i++;
 	}
 	close(fd);
@@ -83,7 +83,7 @@ void		exec_redir(char *line, t_list *envs)
 	{
 		if (ret < 0)
 			ft_putendl_fd("syntax error near unexpected token `newline'", 1);
-		return;
+		return ;
 	}
 	i = -1;
 	while (r.cmds[++i])

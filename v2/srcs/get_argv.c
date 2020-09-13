@@ -17,7 +17,7 @@ char	*modify_argv(char *str, t_list *envs)
 char	**get_argv(char *line, t_list *envs)
 {
 	int		i;
-	char 	**argv;
+	char	**argv;
 
 	if (!(argv = ft_split(line, ' ')))
 		return (0);

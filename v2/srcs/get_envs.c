@@ -2,7 +2,7 @@
 
 t_list		*get_envs(int argc, char **argv, char **envp)
 {
-	int 	pos;
+	int		pos;
 	t_env	*env;
 	t_list	*envs;
 

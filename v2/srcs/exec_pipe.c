@@ -20,7 +20,7 @@ void	parse_pipe(char **line, t_pipe *p, t_list *envs)
 			free(*line);
 			*line = temp2;
 			p->argv = get_argv(p->line, envs);
-			return;
+			return ;
 		}
 	}
 }

@@ -18,7 +18,7 @@ static void		check_end(char *argv, int idx, t_quote *q)
 	else if (q->type == ETC &&
 	(argv[idx + 1] == '\'' || argv[idx + 1] == '\"' || argv[idx + 1] == '\0'))
 		q->end = idx;
-	return;
+	return ;
 }
 
 static void		check_quote(char *argv, int idx, t_quote *q)
@@ -47,29 +47,29 @@ static void		check_quote(char *argv, int idx, t_quote *q)
 
 char			*parse_env(char *argv, t_list *envs)
 {
-	int 	i;
+	int		idx;
 	int		start;
 	char	*ret;
 	char	*temp[3];
 
-	i = -1;
+	idx = -1;
 	start = 0;
-	while (argv[++i])
+	while (argv[++idx])
 	{
-		if (argv[i] == '$' || argv[i + 1] == '\0')
+		if (argv[idx] == '$' || argv[idx + 1] == '\0')
 		{
 			if (start == 0)
 			{
-				ret = ft_substr(argv, start, i);
-				start = i + 1;
-				continue;
+				ret = ft_substr(argv, start, idx);
+				start = idx + 1;
+				continue ;
 			}
-			temp[0] = ft_substr(argv, start, i - start);
+			temp[0] = ft_substr(argv, start, idx - start);
 			temp[1] = ft_strdup(find_value(temp[0], envs));
 			temp[2] = ft_strjoin(ret, temp[1]);
 			free(ret);
 			ret = temp[2];
-			start = i + 1;
+			start = idx + 1;
 		}
 	}
 	return (ret);
@@ -81,10 +81,10 @@ char			*parse_quote(char *argv, t_list *envs)
 	char	*tmp[4];
 	t_quote	q;
 
-	idx = 0;
+	idx = -1;
 	tmp[0] = "";
 	init_quote(&q);
-	while (argv[idx])
+	while (argv[idx++])
 	{
 		check_quote(argv, idx, &q);
 		if (q.end != INIT)
@@ -100,7 +100,6 @@ char			*parse_quote(char *argv, t_list *envs)
 			tmp[0] = tmp[2];
 			init_quote(&q);
 		}
-		idx++;
 	}
 	return (tmp[0]);
 }

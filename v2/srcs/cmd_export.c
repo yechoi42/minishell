@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_export.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/13 16:47:09 by jwon              #+#    #+#             */
+/*   Updated: 2020/09/13 16:48:38 by jwon             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static void		update_value(t_env *env, t_list **envs) // value ������Ʈ
+static void		update_value(t_env *env, t_list **envs)
 {
 	free(((t_env *)(*envs)->content)->value);
 	((t_env *)(*envs)->content)->value = env->value;
@@ -13,6 +25,7 @@ static void		add_env_or_modify_value(char **argv, t_list **envs)
 	t_env	*env;
 	t_list	*curr;
 	int		pos;
+
 	if (!(env = (t_env *)malloc(sizeof(t_env))))
 		return ;
 	pos = ft_strchr(*argv, '=') - *argv;

@@ -27,7 +27,7 @@ static int		has_semicolon_syntax_error(const char *line)
 char			**get_cmds(char *line)
 {
 	int		i;
-	int		empty; // has empty cmds(syntax error)
+	int		empty;
 	char	*temp;
 	char	**cmds;
 

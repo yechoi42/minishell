@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_export.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/13 16:57:17 by jwon              #+#    #+#             */
+/*   Updated: 2020/09/13 16:57:33 by jwon             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**convert_lst_to_arr(t_list *lst)
@@ -64,6 +76,7 @@ void	modify_env_for_export(char **arr)
 void	print_double_arr(char **arr)
 {
 	int		idx;
+
 	idx = 0;
 	while (arr[idx])
 		ft_putendl_fd(arr[idx++], 1);

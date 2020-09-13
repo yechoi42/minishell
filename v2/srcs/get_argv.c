@@ -1,9 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_argv.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/13 17:42:58 by yechoi            #+#    #+#             */
+/*   Updated: 2020/09/13 19:20:48 by yechoi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*modify_argv(char *str, t_list *envs)
 {
 	char	*ret;
 
+	ret = 0;
 	if (has_quote(str))
 	{
 		ret = parse_quote(str, envs);

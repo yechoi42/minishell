@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_pwd_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/13 16:48:08 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/13 16:48:33 by jwon             ###   ########.fr       */
+/*   Updated: 2020/09/13 20:40:14 by yechoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	cmd_pwd(char **argv, t_list *envs)
+void	cmd_pwd(void)
 {
 	char	*pwd;
 
@@ -43,4 +43,29 @@ void	cmd_cd(char **argv, t_list *envs)
 	}
 	if (chdir(argv[1]) == -1)
 		ft_putendl_fd(strerror(errno), 2);
+}
+
+void	cmd_echo(char **argv)
+{
+	int		idx;
+	int		endl;
+
+	idx = 0;
+	endl = 0;
+	while (argv[++idx])
+	{
+		while (argv[idx] && (endl + 1) == idx &&
+		!ft_strncmp(argv[idx], "-n", ft_strlen(argv[idx])))
+		{
+			if (argv[idx + 1] == NULL)
+				return ;
+			endl++;
+			idx++;
+		}
+		ft_putstr_fd(argv[idx], 1);
+		if (argv[idx + 1] != NULL)
+			ft_putstr_fd(" ", 1);
+	}
+	if (!endl)
+		ft_putstr_fd("\n", 1);
 }

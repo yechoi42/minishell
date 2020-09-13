@@ -4,7 +4,7 @@ SRCS	= 	srcs/main.c \
 			srcs/cmd_env.c \
 			srcs/cmd_exit.c \
 			srcs/cmd_export.c \
-			srcs/cmd_pwd_cd.c \
+			srcs/cmd_pwd_cd_echo.c \
 			srcs/cmd_redir.c \
 			srcs/cmd_unset.c \
 			srcs/control_signal.c \
@@ -28,6 +28,8 @@ LIBS	=	-L./libs/libft -lft
 
 HEADER	=	-I./includes
 
+FLAG	= 	-Wall -Wextra -Werror
+
 CC		=	gcc
 
 RM		=	rm -rf
@@ -35,7 +37,7 @@ RM		=	rm -rf
 all		: $(NAME)
 
 $(NAME)	: $(LIBFT)
-	$(CC) $(SRCS) $(LIBS) $(HEADER) -o $(NAME)
+	$(CC) $(SRCS) $(LIBS) $(HEADER) $(FLAG) -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C ./libs/libft

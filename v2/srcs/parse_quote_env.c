@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_quote_env.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/13 17:41:41 by yechoi            #+#    #+#             */
+/*   Updated: 2020/09/13 19:20:09 by yechoi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void		init_quote(t_quote *q)
@@ -49,8 +61,7 @@ char			*parse_env(char *argv, t_list *envs)
 {
 	int		idx;
 	int		start;
-	char	*ret;
-	char	*temp[3];
+	char	*temp[4];
 
 	idx = -1;
 	start = 0;
@@ -60,19 +71,19 @@ char			*parse_env(char *argv, t_list *envs)
 		{
 			if (start == 0)
 			{
-				ret = ft_substr(argv, start, idx);
+				temp[3] = ft_substr(argv, start, idx);
 				start = idx + 1;
 				continue ;
 			}
 			temp[0] = ft_substr(argv, start, idx - start);
 			temp[1] = ft_strdup(find_value(temp[0], envs));
-			temp[2] = ft_strjoin(ret, temp[1]);
-			free(ret);
-			ret = temp[2];
+			temp[2] = ft_strjoin(temp[3], temp[1]);
+			free(temp[3]);
+			temp[3] = temp[2];
 			start = idx + 1;
 		}
 	}
-	return (ret);
+	return (temp[3]);
 }
 
 char			*parse_quote(char *argv, t_list *envs)
@@ -84,7 +95,7 @@ char			*parse_quote(char *argv, t_list *envs)
 	idx = -1;
 	tmp[0] = "";
 	init_quote(&q);
-	while (argv[idx++])
+	while (argv[++idx])
 	{
 		check_quote(argv, idx, &q);
 		if (q.end != INIT)

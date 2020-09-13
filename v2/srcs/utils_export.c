@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_export.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/13 16:57:17 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/13 16:57:33 by jwon             ###   ########.fr       */
+/*   Updated: 2020/09/13 19:03:00 by yechoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	**convert_lst_to_arr(t_list *lst)
 void	sort_double_arr(char **arr)
 {
 	int		i;
-	int		j;
 	char	*temp;
 
 	i = 0;

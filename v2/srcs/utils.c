@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/13 16:46:10 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/13 17:24:36 by jwon             ###   ########.fr       */
+/*   Updated: 2020/09/13 19:43:56 by yechoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	free_double_arr(char **arr)
 {
 	int		idx;
 
+	if (!arr)
+		return;
 	idx = -1;
 	while (arr[++idx])
 		free(arr[idx]);

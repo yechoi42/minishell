@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_redir.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/13 17:42:00 by yechoi            #+#    #+#             */
+/*   Updated: 2020/09/13 19:00:49 by yechoi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int		do_redir(t_redir *r, t_list *envs)
 {
-	int		i;
 	int		fd;
 	char	*path;
 
@@ -26,7 +37,6 @@ static int		do_redir(t_redir *r, t_list *envs)
 
 static int		do_dredir(t_redir *r, t_list *envs)
 {
-	int		i;
 	int		fd;
 	char	*path;
 
@@ -50,7 +60,6 @@ static int		do_dredir(t_redir *r, t_list *envs)
 
 static int		do_bredir(t_redir *r, t_list *envs)
 {
-	int		i;
 	int		fd;
 	char	*path;
 
@@ -78,7 +87,6 @@ void			cmd_redir(t_redir *r, t_list *envs)
 	int		ret;
 	int		status;
 	pid_t	child;
-	char	*path;
 
 	i = 0;
 	child = fork();

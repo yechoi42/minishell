@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cmds.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/13 17:42:37 by yechoi            #+#    #+#             */
+/*   Updated: 2020/09/13 20:22:32 by yechoi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int		print_exit_status(void)
@@ -16,8 +28,10 @@ int				exec_builtin(char *line, t_list *envs)
 	argv = get_argv(line, envs);
 	if (!ft_strncmp(argv[0], "cd", ft_strlen(argv[0])))
 		cmd_cd(argv, envs);
+	else if (!ft_strncmp(argv[0], "echo", ft_strlen(argv[0])))
+		cmd_echo(argv);
 	else if (!ft_strncmp(argv[0], "pwd", ft_strlen(argv[0])))
-		cmd_pwd(argv, envs);
+		cmd_pwd();
 	else if (!ft_strncmp(argv[0], "env", ft_strlen(argv[0])))
 		cmd_env(argv, envs);
 	else if (!ft_strncmp(argv[0], "export", ft_strlen(argv[0])))
@@ -25,7 +39,7 @@ int				exec_builtin(char *line, t_list *envs)
 	else if (!ft_strncmp(argv[0], "unset", ft_strlen(argv[0])))
 		cmd_unset(argv, envs);
 	else if (!ft_strncmp(argv[0], "exit", ft_strlen(argv[0])))
-		cmd_exit(argv, envs);
+		cmd_exit(argv);
 	else
 	{
 		free_double_arr(argv);

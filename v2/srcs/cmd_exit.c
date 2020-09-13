@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/13 16:46:55 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/13 16:46:58 by jwon             ###   ########.fr       */
+/*   Updated: 2020/09/13 18:58:38 by yechoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int		ft_isdigit_str(char *str)
 	return (1);
 }
 
-void			cmd_exit(char **argv, t_list *envs)
+void			cmd_exit(char **argv)
 {
 	int	argc;
 

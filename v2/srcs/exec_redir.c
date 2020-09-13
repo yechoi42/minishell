@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_redir.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/13 17:42:51 by yechoi            #+#    #+#             */
+/*   Updated: 2020/09/13 19:01:25 by yechoi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void		init_redir(char *command, t_redir *r)
@@ -17,12 +29,21 @@ void		init_redir(char *command, t_redir *r)
 	r->cmds = NULL;
 }
 
+int			parse_redir_final(t_redir *r, int j)
+{
+	if (has_redir_syntax_error(r->argv[j]))
+		return (-1);
+	r->types[j++] = 0;
+	r->argv[j] = 0;
+	r->argc = j;
+	return (1);
+}
+
 int			parse_redir(char *command, t_redir *r)
 {
 	int		i;
 	int		j;
 	int		start;
-	char	*temp;
 
 	i = -1;
 	j = 0;
@@ -43,12 +64,7 @@ int			parse_redir(char *command, t_redir *r)
 		}
 	}
 	r->argv[j] = substr_and_trim(command, start, i - start, " ");
-	if (has_redir_syntax_error(r->argv[j]))
-		return (-1);
-	r->types[j++] = 0;
-	r->argv[j] = 0;
-	r->argc = j;
-	return (1);
+	return (parse_redir_final(r, j));
 }
 
 void		open_unnecessary_files(t_redir *r)

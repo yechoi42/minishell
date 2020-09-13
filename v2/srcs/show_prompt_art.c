@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   show_prompt_art.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/13 16:56:41 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/13 16:56:42 by jwon             ###   ########.fr       */
+/*   Updated: 2020/09/13 19:22:29 by yechoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void		show_art(void)
 	int		fd;
 	char	*line;
 
-	fd = open("header", O_RDONLY);
+	fd = open("ascii_art", O_RDONLY);
 	while (get_next_line(fd, &line))
 	{
 		ft_putstr_fd("\033[36m", 1);

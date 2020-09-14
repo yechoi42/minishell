@@ -6,7 +6,7 @@
 /*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/13 17:42:58 by yechoi            #+#    #+#             */
-/*   Updated: 2020/09/13 19:20:48 by yechoi           ###   ########.fr       */
+/*   Updated: 2020/09/13 22:40:17 by yechoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ char	**get_argv(char *line, t_list *envs)
 	i = -1;
 	while (argv[++i])
 	{
-		if (has_quote(argv[i]) || has_env(argv[i]))
+		if (ft_strlen(argv[i]) != 1
+			&& (has_quote(argv[i]) || has_env(argv[i])))
 			argv[i] = modify_argv(argv[i], envs);
 	}
 	return (argv);

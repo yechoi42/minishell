@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jwon <jwon@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/13 17:01:51 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/13 20:42:56 by yechoi           ###   ########.fr       */
+/*   Updated: 2020/09/14 12:10:09 by jwon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@
 # define DREDIR	6
 # define BREDIR	60
 
+int				g_exit_value;
 char			**g_envp;
 char			*g_env_user;
-int				g_exit_value;
 
 typedef struct	s_env
 {
@@ -75,9 +75,9 @@ void			handle_signal(int signo);
 /*
 **	show_prompt_art.c
 */
-void			show_art(void);
 int				input_from_prompt(char **line);
 void			show_prompt(char *user);
+void			show_art(void);
 
 /*
 **	get_envs.c

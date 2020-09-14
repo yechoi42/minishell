@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jwon <jwon@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/13 17:42:37 by yechoi            #+#    #+#             */
-/*   Updated: 2020/09/13 20:22:32 by yechoi           ###   ########.fr       */
+/*   Updated: 2020/09/14 12:17:43 by jwon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,20 @@ static int		print_exit_status(void)
 	return (1);
 }
 
+static int		exec_dollar(char *line)
+{
+	if (line[0] == '$' && line[1] == '?')
+	{
+		print_exit_status();
+		return (1);
+	}
+	return (0);
+}
+
 int				exec_builtin(char *line, t_list *envs)
 {
 	char **argv;
 
-	if (line[0] == '$' && line[1] == '?' && print_exit_status())
-		return (1);
 	argv = get_argv(line, envs);
 	if (!ft_strncmp(argv[0], "cd", ft_strlen(argv[0])))
 		cmd_cd(argv, envs);
@@ -83,6 +91,6 @@ void			exec_cmds(char *line, t_list *envs)
 		exec_pipe(line, envs);
 	else if (has_redir(line))
 		exec_redir(line, envs);
-	else if (!exec_builtin(line, envs))
+	else if (!exec_builtin(line, envs) && !exec_dollar(line))
 		exec_others(line, envs);
 }

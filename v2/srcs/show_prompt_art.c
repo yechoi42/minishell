@@ -3,41 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   show_prompt_art.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yechoi <yechoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jwon <jwon@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/13 16:56:41 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/13 19:22:29 by yechoi           ###   ########.fr       */
+/*   Updated: 2020/09/14 12:13:12 by jwon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		show_art(void)
-{
-	int		fd;
-	char	*line;
-
-	fd = open("ascii_art", O_RDONLY);
-	while (get_next_line(fd, &line))
-	{
-		ft_putstr_fd("\033[36m", 1);
-		ft_putendl_fd(line, STDOUT_FILENO);
-		free(line);
-	}
-	close(fd);
-	free(line);
-	ft_putendl_fd("\033[0m", 1);
-}
-
-int			input_from_prompt(char **line)
+static void		input_catch_ctrld(int ctrld, char **line)
 {
 	char	*temp;
+	char	*buf;
 
-	if ((get_next_line(0, line) == 0))
+	buf = "";
+	while (!(get_next_line(0, line)))
 	{
-		ft_putstr_fd("exit", 1);
-		exit(EXIT_SUCCESS);
+		temp = ft_strjoin(buf, *line);
+		*buf ? free(buf) : 0;
+		buf = temp;
+		if (!(**line) && !ctrld)
+		{
+			ft_putstr_fd("exit", 1);
+			free(buf);
+			exit(EXIT_SUCCESS);
+		}
+		ft_putstr_fd("  \b\b", 1);
+		ctrld = 1;
+		free(*line);
 	}
+	if (ctrld)
+	{
+		free(*line);
+		*line = ft_strdup(buf);
+	}
+	*buf ? free(buf) : 0;
+}
+
+int				input_from_prompt(char **line)
+{
+	int		ctrld;
+	char	*temp;
+
+	ctrld = 0;
+	input_catch_ctrld(ctrld, line);
 	if (**line == '\n')
 	{
 		free(*line);
@@ -56,7 +66,7 @@ int			input_from_prompt(char **line)
 	return (1);
 }
 
-void		show_prompt(char *user)
+void			show_prompt(char *user)
 {
 	char	*pwd;
 	char	*tmp;
@@ -82,4 +92,21 @@ void		show_prompt(char *user)
 	free(set);
 	free(tmp);
 	free(pwd);
+}
+
+void			show_art(void)
+{
+	int		fd;
+	char	*line;
+
+	fd = open("ascii_art", O_RDONLY);
+	while (get_next_line(fd, &line))
+	{
+		ft_putstr_fd("\033[36m", 1);
+		ft_putendl_fd(line, STDOUT_FILENO);
+		free(line);
+	}
+	close(fd);
+	free(line);
+	ft_putendl_fd("\033[0m", 1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwon <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: jwon <jwon@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/13 16:57:13 by jwon              #+#    #+#             */
-/*   Updated: 2020/09/13 16:57:15 by jwon             ###   ########.fr       */
+/*   Updated: 2020/09/14 11:07:08 by jwon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int			is_valid_env(char *arg)
 {
+	if (ft_isdigit(arg[0]) || arg[0] == '=')
+		return (0);
 	if (ft_strchr(arg, '='))
 		return (1);
 	return (0);

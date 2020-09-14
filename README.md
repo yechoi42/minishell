@@ -1,12 +1,35 @@
-| 날짜 | 구현한 기능                                                  | 구현할 기능               |
-| ---- | ------------------------------------------------------------ | ------------------------- |
-| 0902 | 환경변수 받아오기                                            | 명령어 파싱하기           |
-| 0903 | (구현중)<br />환경변수 추가하기<br />명령어 파싱하기         |                           |
-| 0904 | (구현중)<br />환경변수 추가하기                              | 파싱한 명령어 execve 활용 |
-| 0905 | unset<br />execve 활용해 내장함수 구현                       |                           |
-| 0907 | export 인자가 입력되지 않을 경우, 접두사로 ‘declare -x’가 붙고 key를 기준으로 내림차순<br />quotes 파싱 | 리다이렉션<br />파이프    |
-|      |                                                              |                           |
-|      |                                                              |                           |
-|      |                                                              |                           |
-|      |                                                              |                           |
+__  __ ___ _  _ ___ ___ _  _ ___ _    _
+```
+  __  __ ___ _  _ ___ ___ _  _ ___ _    _
+ |  \/  |_ _| \| |_ _/ __| || | __| |  | |
+ | |\/| || || .` || |\__ \ __ | _|| |__| |__
+ |_|  |_|___|_|\_|___|___/_||_|___|____|____| @yechoi @jwon
+```
+
+*20.09.02 ~ 20.09.14*
+*Made by [yechoi42](https://github.com/yechoi42) [jwon42](https://github.com/jwon42)*
+
+
+
+## minishell
+
+my own little shell mimicking bash
+
+- builtin functions(echo, cd, pwd, export, unset, env, exit etc...)
+- ; seperates commands 
+- ' and " work like in bash except for multiline commands
+- redirections \>, \>>, \< work like in bash
+- pipes | work like in bash
+- environment variables($sth) work like in bash
+- $? works like in bash
+- ctrl-C, ctrl-D, ctrl-\ have same results as in bas
+
+### 
+
+## how to run minishell
+
+```
+$ make
+$ ./minishell
+```
 

@@ -12,6 +12,16 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Parses a pipe command into two parts
+ * 
+ * Splits a command line containing a pipe into two parts:
+ * the command before the pipe and the command after the pipe.
+ * 
+ * @param line Pointer to the command line (will be modified)
+ * @param p Pipe structure to store the first command
+ * @param envs List of environment variables
+ */
 void	parse_pipe(char **line, t_pipe *p, t_list *envs)
 {
 	int		i;
@@ -36,6 +46,17 @@ void	parse_pipe(char **line, t_pipe *p, t_list *envs)
 	}
 }
 
+/**
+ * @brief Handles the first process in a pipe
+ * 
+ * Redirects stdout to the write end of the pipe,
+ * closes the pipe file descriptors, and executes the command.
+ * 
+ * @param child Child process ID
+ * @param fd Pipe file descriptors
+ * @param envs List of environment variables
+ * @param p Pipe structure containing the command
+ */
 void	exec_pipe_case_zero(int child, int fd[2], t_list *envs, t_pipe p)
 {
 	if (child == 0)
@@ -48,6 +69,17 @@ void	exec_pipe_case_zero(int child, int fd[2], t_list *envs, t_pipe p)
 	}
 }
 
+/**
+ * @brief Handles the second process in a pipe
+ * 
+ * Redirects stdin from the read end of the pipe,
+ * closes the pipe file descriptors, and executes the command.
+ * 
+ * @param child Child process ID
+ * @param fd Pipe file descriptors
+ * @param envs List of environment variables
+ * @param line Command to execute
+ */
 void	exec_pipe_case_one(int child, int fd[2], t_list *envs, char *line)
 {
 	if (child == 0)
@@ -60,6 +92,15 @@ void	exec_pipe_case_one(int child, int fd[2], t_list *envs, char *line)
 	}
 }
 
+/**
+ * @brief Executes a command containing a pipe
+ * 
+ * Creates a pipe and two child processes, one for each side of the pipe.
+ * The first process writes to the pipe, and the second process reads from it.
+ * 
+ * @param line Command line containing a pipe
+ * @param envs List of environment variables
+ */
 void	exec_pipe(char *line, t_list *envs)
 {
 	int		fd[2];

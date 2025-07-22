@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Sets up the shell environment
+ * 
+ * Initializes global variables, finds the username, displays ASCII art,
+ * and sets up signal handlers for SIGINT and SIGQUIT.
+ * 
+ * @param envs List of environment variables
+ */
 void	setup(t_list *envs)
 {
 	g_exit_value = 0;
@@ -21,6 +29,21 @@ void	setup(t_list *envs)
 	signal(SIGQUIT, (void *)handle_signal);
 }
 
+/**
+ * @brief Main function for the minishell
+ * 
+ * Initializes the environment, enters the main shell loop where it:
+ * 1. Displays the prompt
+ * 2. Reads input from the user
+ * 3. Parses the input into commands
+ * 4. Executes each command
+ * 5. Frees allocated memory
+ * 
+ * @param argc Argument count (not used)
+ * @param argv Argument vector (not used)
+ * @param envp Environment variables from the parent process
+ * @return Always returns 0
+ */
 int		main(int argc, char **argv, char **envp)
 {
 	int		i;

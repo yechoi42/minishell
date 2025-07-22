@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Prints the exit status of the last command
+ * 
+ * Displays the last exit value followed by ': command not found'
+ * 
+ * @return Always returns 1
+ */
 static int		print_exit_status(void)
 {
 	ft_putstr_fd(ft_itoa(g_exit_value), 1);
@@ -19,6 +26,14 @@ static int		print_exit_status(void)
 	return (1);
 }
 
+/**
+ * @brief Handles the $? special variable
+ * 
+ * Checks if the command is $? and prints the exit status if it is.
+ * 
+ * @param line The command line to check
+ * @return 1 if the command is $?, 0 otherwise
+ */
 static int		exec_dollar(char *line)
 {
 	if (line[0] == '$' && line[1] == '?')
@@ -29,6 +44,17 @@ static int		exec_dollar(char *line)
 	return (0);
 }
 
+/**
+ * @brief Executes built-in commands
+ * 
+ * Parses the command line and executes the appropriate built-in command
+ * if the command matches one of the built-ins (cd, echo, pwd, env,
+ * export, unset, exit).
+ * 
+ * @param line The command line to execute
+ * @param envs List of environment variables
+ * @return 1 if a built-in command was executed, 0 otherwise
+ */
 int				exec_builtin(char *line, t_list *envs)
 {
 	char **argv;
@@ -58,6 +84,15 @@ int				exec_builtin(char *line, t_list *envs)
 	return (1);
 }
 
+/**
+ * @brief Executes external commands
+ * 
+ * Finds the path of the command and executes it using execve.
+ * Creates a child process to execute the command and waits for it to finish.
+ * 
+ * @param line The command line to execute
+ * @param envs List of environment variables
+ */
 void			exec_others(char *line, t_list *envs)
 {
 	int		status;
@@ -85,6 +120,15 @@ void			exec_others(char *line, t_list *envs)
 	g_exit_value = status / 256;
 }
 
+/**
+ * @brief Main command execution function
+ * 
+ * Determines the type of command (pipe, redirection, $?, built-in, or external)
+ * and calls the appropriate function to execute it.
+ * 
+ * @param line The command line to execute
+ * @param envs List of environment variables
+ */
 void			exec_cmds(char *line, t_list *envs)
 {
 	if (has_pipe(line))
